@@ -1,4 +1,4 @@
-export const WordRoots = [
+const WordRoots = [
   {
     id: 1,
     root: "TypeScript 简介",
@@ -384,3 +384,4 @@ export const WordRoots = [
     }
   }
 ]
+window.WordRoots = WordRoots;

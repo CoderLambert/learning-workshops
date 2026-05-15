@@ -149,4 +149,4 @@ const Storage = {
 };
 
 // 初始化存储
-Storage.init();
+Storage.init();window.Storage = Storage;
