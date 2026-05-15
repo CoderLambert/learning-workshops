@@ -4,6 +4,8 @@ const WordRoots = [
     root: "TypeScript 简介",
     origin: "基础入门",
     meaning: "带类型系统的JavaScript超集",
+    difficulty: "基础",
+    duration: "5分钟",
     description: "TypeScript是微软开发的JavaScript超集，为JS添加了可选的静态类型系统，在运行前就能发现代码中的类型错误，大幅提升大型项目的可维护性和开发效率，支持最新的ECMAScript特性，编译后可以运行在任何支持JS的环境中。最新稳定版本为TypeScript 5.5。",
     examples: [
       {
@@ -36,6 +38,8 @@ const WordRoots = [
     root: "环境安装与配置",
     origin: "基础入门",
     meaning: "安装和配置TypeScript开发环境",
+    difficulty: "基础",
+    duration: "6分钟",
     description: "TypeScript可以通过npm全局安装，也可以在项目中局部安装，配置文件tsconfig.json用于配置编译选项，包括目标版本、模块系统、严格模式、输出目录等各种编译参数，最新版本还支持自动类型检测和配置优化。",
     examples: [
       {
@@ -68,6 +72,8 @@ const WordRoots = [
     root: "基础类型系统",
     origin: "核心特性",
     meaning: "TypeScript的基础类型",
+    difficulty: "基础",
+    duration: "8分钟",
     description: "TypeScript提供了丰富的基础类型系统，包括JS原始类型的类型标注：string、number、boolean、null、undefined、symbol、bigint，还有any、unknown、never、void等特殊类型，以及数组、元组、枚举等复合类型。",
     examples: [
       {
