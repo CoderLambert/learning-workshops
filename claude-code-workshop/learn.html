@@ -111,6 +111,7 @@
     <div class="flex flex-wrap gap-2 justify-center mb-8">
       <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-filter="all">全部</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="fav">⭐ 我的收藏</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="learned">✅ 已学习</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="easy">⭐ 入门级</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="advanced">⭐⭐ 进阶</button>
     </div>
@@ -124,6 +125,17 @@
   <script src="./js/wordData.js"></script>
   <script src="./js/storage.js"></script>
   <script>
+    // 转换数据格式，兼容原有逻辑
+    window.knowledgeList = window.WordRoots.map(item => ({
+      id: item.id,
+      title: item.root,
+      icon: '🤖',
+      description: item.description,
+      tags: [item.origin],
+      difficulty: item.difficulty,
+      duration: item.duration
+    }));
+
     // 搜索功能
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', (e) => {
@@ -170,11 +182,25 @@
       renderKnowledgeList();
       // 初始化收藏状态
       const favorites = JSON.parse(localStorage.getItem('cl_collection') || '[]');
+      // 初始化已学习状态
+      const learned = JSON.parse(localStorage.getItem('cl_learned') || '[]');
       favorites.forEach(id => {
         const btn = document.getElementById(`fav-btn-${id}`);
         if (btn) {
           btn.innerHTML = '<i class="fa fa-star text-yellow-500"></i> 已收藏';
           btn.classList.add('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
+        }
+      });
+      learned.forEach(id => {
+        const card = document.querySelector(`[data-id="${id}"]`);
+        if (card) {
+          // 增加已学习标记
+          const learnedTag = document.createElement('span');
+          learnedTag.className = 'ml-2 px-2 py-0.5 bg-green-50 text-green-700 text-xs font-semibold rounded-full';
+          learnedTag.innerText = '✅ 已学习';
+          card.querySelector('h3').appendChild(learnedTag);
+          // 卡片变浅，显示已学习
+          card.classList.add('opacity-75');
         }
       });
     });
@@ -191,10 +217,13 @@
               <i class="fa fa-star-o"></i> 收藏
             </button>
           </div>
-          <h3 class="text-xl font-bold mb-2">${item.title}</h3>
+          <h3 class="text-xl font-bold mb-2 flex items-center">${item.title}</h3>
           <p class="text-gray-600 mb-4 leading-relaxed">${item.description}</p>
           <div class="flex flex-wrap gap-2 mb-4">
             ${item.tags.map(tag => `<span class="px-2.5 py-1 bg-purple-50 text-purple-700 text-xs font-semibold rounded-full">${tag}</span>`).join('')}
+            <span class="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full flex items-center gap-1">
+              <i class="fa fa-clock-o"></i> ${item.duration}
+            </span>
           </div>
           <div class="flex justify-between items-center">
             <span class="text-sm text-gray-500">难度：${item.difficulty}</span>
@@ -221,6 +250,9 @@
         if (value === 'fav') {
           const favorites = JSON.parse(localStorage.getItem('cl_collection') || '[]');
           filtered = filtered.filter(item => favorites.includes(item.id));
+        } else if (value === 'learned') {
+          const learned = JSON.parse(localStorage.getItem('cl_learned') || '[]');
+          filtered = filtered.filter(item => learned.includes(item.id));
         } else if (value === 'easy') {
           filtered = filtered.filter(item => item.difficulty === '入门级');
         } else if (value === 'advanced') {

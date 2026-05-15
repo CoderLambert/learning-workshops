@@ -4,6 +4,8 @@ const WordRoots = [
     root: "Claude Code 简介",
     origin: "基础入门",
     meaning: "Anthropic推出的AI代码助手",
+    difficulty: "入门级",
+    duration: "5分钟",
     description: "Claude Code是Anthropic公司推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求，支持100+编程语言，上下文窗口最高可达200K tokens，适合处理大型项目级开发任务。",
     examples: [
       {
@@ -36,6 +38,8 @@ const WordRoots = [
     root: "账号开通与访问",
     origin: "基础入门",
     meaning: "如何获取和使用Claude Code",
+    difficulty: "入门级",
+    duration: "5分钟",
     description: "Claude Code可以通过两种方式使用：网页版直接访问anthropic.com/code，或者通过IDE插件（VS Code、JetBrains系列）使用，需要注册Anthropic账号并开通Claude Pro订阅，也可以通过API方式调用集成到自有开发流程中。",
     examples: [
       {
@@ -68,6 +72,8 @@ const WordRoots = [
     root: "核心功能 - 代码生成",
     origin: "核心功能",
     meaning: "根据需求自动生成高质量代码",
+    difficulty: "入门级",
+    duration: "8分钟",
     description: "Claude Code支持根据自然语言描述生成各种编程语言的代码，从简单函数到复杂项目模块都可以生成，生成的代码结构清晰、注释完善、符合最佳实践，支持边生成边调整需求，迭代优化代码。",
     examples: [
       {
@@ -100,6 +106,8 @@ const WordRoots = [
     root: "核心功能 - 代码调试",
     origin: "核心功能",
     meaning: "快速定位和修复代码bug",
+    difficulty: "入门级",
+    duration: "8分钟",
     description: "Claude Code可以帮助分析错误日志、定位bug原因、提供修复方案，甚至可以直接给出修复后的代码，支持各种复杂问题的调试，包括并发问题、内存泄漏、性能瓶颈等难以排查的问题。",
     examples: [
       {
@@ -132,6 +140,8 @@ const WordRoots = [
     root: "核心功能 - 代码重构",
     origin: "核心功能",
     meaning: "优化现有代码质量和结构",
+    difficulty: "进阶",
+    duration: "10分钟",
     description: "Claude Code可以帮助对现有代码进行重构优化，提升代码的可读性、可维护性、性能和安全性，支持各种重构操作：重命名、提取函数、优化结构、消除重复代码、替换过时API、升级框架版本等。",
     examples: [
       {
@@ -164,6 +174,8 @@ const WordRoots = [
     root: "提示词最佳实践",
     origin: "使用技巧",
     meaning: "写出高质量提示词获得更好结果",
+    difficulty: "进阶",
+    duration: "10分钟",
     description: "要获得更好的Claude Code使用效果，需要掌握提示词编写技巧：明确需求、提供足够上下文、给出示例、说明约束条件、分步骤提出需求，避免模糊和歧义的描述，让Claude Code准确理解你的意图。",
     examples: [
       {
@@ -196,6 +208,8 @@ const WordRoots = [
     root: "项目级开发支持",
     origin: "高级用法",
     meaning: "支持大型复杂项目开发",
+    difficulty: "进阶",
+    duration: "12分钟",
     description: "Claude Code支持大型项目级开发任务，可以理解整个项目的结构和逻辑，提供全流程支持：需求分析、架构设计、模块拆分、代码编写、测试编写、文档生成、部署建议，支持多轮协作完成整个项目开发。",
     examples: [
       {
@@ -228,6 +242,8 @@ const WordRoots = [
     root: "API调用与集成",
     origin: "高级用法",
     meaning: "将Claude Code集成到自有开发流程",
+    difficulty: "进阶",
+    duration: "12分钟",
     description: "可以通过Anthropic官方API将Claude Code能力集成到自己的开发流程、IDE、CI/CD系统中，实现自定义的开发工作流，比如自动代码审查、自动bug修复、自动生成测试用例等自动化流程。",
     examples: [
       {
@@ -260,6 +276,8 @@ const WordRoots = [
     root: "安全最佳实践",
     origin: "最佳实践",
     meaning: "安全使用Claude Code的注意事项",
+    difficulty: "入门级",
+    duration: "8分钟",
     description: "使用Claude Code时需要注意安全问题：不要上传敏感代码和数据到公共服务、对生成的代码进行安全审查、注意知识产权问题、遵守公司安全规范、避免生成恶意代码、敏感场景使用私有部署版本。",
     examples: [
       {
@@ -292,6 +310,8 @@ const WordRoots = [
     root: "常见问题排查",
     origin: "最佳实践",
     meaning: "使用过程中常见问题的解决方法",
+    difficulty: "入门级",
+    duration: "8分钟",
     description: "使用Claude Code过程中常见的问题及解决方法：生成结果不符合预期、上下文太长报错、访问速度慢、API调用失败、生成代码有bug等问题的排查思路和解决方案。",
     examples: [
       {
