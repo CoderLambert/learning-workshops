@@ -1,0 +1,47 @@
+tailwindcss4-workshop/manifest.json
+  s_c906e6f4d7be54::t_fca30cb6340606 11
+  s_c906e6f4d7be54::t_d75c734a6c658f 16
+  s_c906e6f4d7be54::t_c18fb188d21e3e 5
+tailwindcss4-workshop/root-detail.html
+  s_c906e6f4d7be54::t_025bd8c711b93e 29
+tailwindcss4-workshop/flashcard.html
+  s_c906e6f4d7be54::t_ba4b05c0d571bd 29
+tailwindcss4-workshop/index.html
+  s_c906e6f4d7be54::t_637b5786c8135a 56
+  s_c906e6f4d7be54::t_9e5c2aa728fbaa 42
+  s_c906e6f4d7be54::t_07193eb14ccc36 58-61
+  s_c906e6f4d7be54::t_7754b92bb03a26 76-77
+  s_c906e6f4d7be54::t_32a9cc75a22e70 122-124
+  s_c906e6f4d7be54::t_83df3a070b5f8e 35
+  s_c906e6f4d7be54::t_b96a1b44ed3d55 50
+tailwindcss4-workshop/learn.html
+  s_c906e6f4d7be54::t_06bcd3092c40db 44-47
+  s_c906e6f4d7be54::t_7633b24c174ecd 42
+  s_c906e6f4d7be54::t_7755ae2118d377 74-76
+  s_c906e6f4d7be54::t_93deea5573f766 27
+  s_c906e6f4d7be54::t_2f5eaf2b65280d 36
+  s_c906e6f4d7be54::t_d749dce9366d88 218
+tailwindcss4-workshop/progress.html
+  s_c906e6f4d7be54::t_ea9a6e51c42b9b 28
+  s_c906e6f4d7be54::t_f2f8d9c54e5a11 80
+tailwindcss4-workshop/sw.js
+  s_c906e6f4d7be54::t_427038f60012e9 1-2,4-14,60,64
+tailwindcss4-workshop/roots.html
+  s_c906e6f4d7be54::t_c5e1b637072a5c 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "6a0e2e496b0bdfb9ff303db8919aad85b95b8ce0",
+  "prompts": {},
+  "sessions": {
+    "s_c906e6f4d7be54": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "218c2c21-66b8-4aab-8335-313fd94b163c",
+        "model": "glm-5.1"
+      },
+      "human_author": "lambert.li <lambert.li@jtexpress.com>"
+    }
+  }
+}
