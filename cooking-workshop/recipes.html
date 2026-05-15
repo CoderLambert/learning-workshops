@@ -67,6 +67,7 @@
     <!-- 筛选栏 -->
     <div class="flex flex-wrap gap-2 justify-center mb-8">
       <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-filter="all">全部</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="collection">⭐ 我的收藏</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="easy">⭐ 零失败</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="fast">⏰ 15分钟快手</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="hard">🍲 硬菜硬菜</button>
@@ -530,6 +531,12 @@
         recipeCards.forEach(card => {
           if (filter === 'all') {
             card.style.display = 'block';
+          } else if (filter === 'collection') {
+            // 我的收藏筛选
+            const collectedRecipes = JSON.parse(localStorage.getItem('ck_collection') || '[]');
+            const href = card.querySelector('a').getAttribute('href');
+            const id = parseInt(href.match(/id=(\d+)/)[1]);
+            card.style.display = collectedRecipes.includes(id) ? 'block' : 'none';
           } else {
             const tags = Array.from(card.querySelectorAll('.text-xs')).map(tag => tag.textContent.trim());
             let match = false;
