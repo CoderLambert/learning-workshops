@@ -6,7 +6,7 @@ const WordRoots = [
     meaning: "Anthropic推出的AI代码助手",
     difficulty: "入门级",
     duration: "5分钟",
-    description: "Claude Code是Anthropic公司推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求，支持100+编程语言，上下文窗口最高可达200K tokens，适合处理大型项目级开发任务。",
+    description: "Claude Code是Anthropic公司推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求，支持100+编程语言，上下文窗口最高可达200K tokens，适合大型项目级开发任务。",
     examples: [
       {
         word: "核心优势",
@@ -337,6 +337,216 @@ const WordRoots = [
       question: "遇到上下文过长报错时，以下哪种处理方式不对？",
       options: ["精简上下文只保留相关信息", "拆分需求分批处理", "删除无用的历史对话", "重复发送相同请求"],
       correctAnswer: 3
+    }
+  },
+  {
+    id: 11,
+    root: "安装与环境配置",
+    origin: "进阶使用",
+    meaning: "多平台安装与环境配置指南",
+    difficulty: "入门级",
+    duration: "8分钟",
+    description: "详细讲解Claude Code在不同操作系统的安装方式、国内用户特殊配置、版本升级、常见安装问题解决，支持终端、IDE插件、API等多种部署方式。",
+    examples: [
+      {
+        word: "系统要求",
+        meaning: "前置环境依赖",
+        breakdown: { root: "进阶使用" },
+        explanation: "Node.js 18+ 版本；macOS/Linux/Windows全系统支持；IDE版本支持VS Code 1.80+、JetBrains系列2023.1+"
+      },
+      {
+        word: "安装方式",
+        meaning: "不同安装渠道",
+        breakdown: { root: "进阶使用" },
+        explanation: "官方脚本安装：curl -fsSL https://claude.ai/install.sh | bash；npm安装：npm install -g @anthropic-ai/claude-code；brew安装：brew install --cask claude-code；国内阿里云百炼用户需配置ANTHROPIC_BASE_URL环境变量"
+      },
+      {
+        word: "验证与更新",
+        meaning: "版本管理",
+        breakdown: { root: "进阶使用" },
+        explanation: "验证安装：claude --version；版本更新：claude update；卸载：claude uninstall；查看配置：claude config list"
+      }
+    ],
+    quiz: {
+      question: "Claude Code运行需要的最低Node.js版本是多少？",
+      options: ["Node.js 16", "Node.js 18", "Node.js 20", "Node.js 22"],
+      correctAnswer: 1
+    }
+  },
+  {
+    id: 12,
+    root: "核心命令与启动参数",
+    origin: "进阶使用",
+    meaning: "常用命令与高级启动参数详解",
+    difficulty: "进阶",
+    duration: "10分钟",
+    description: "全面覆盖Claude Code的常用命令、启动参数、会话控制技巧，帮助你快速定制适合自己的工作流，大幅提升开发效率。",
+    examples: [
+      {
+        word: "基础启动参数",
+        meaning: "常用启动选项",
+        breakdown: { root: "进阶使用" },
+        explanation: "直接执行任务：claude -p '检查代码风格问题'；添加额外工作目录：--add-dir ../lib ../apps；替换系统提示词：--system-prompt '只回答TypeScript相关问题'；追加系统提示词：--append-system-prompt '始终添加完善的类型标注'"
+      },
+      {
+        word: "会话管理命令",
+        meaning: "历史会话管理",
+        breakdown: { root: "进阶使用" },
+        explanation: "列出历史会话：claude sessions list；恢复会话：claude sessions resume <id>；导出会话：claude sessions export <id>；删除会话：claude sessions delete <id>"
+      },
+      {
+        word: "输出控制参数",
+        meaning: "自定义输出方式",
+        breakdown: { root: "进阶使用" },
+        explanation: "输出到文件：claude -p '生成README文档' > README.md；静默模式：--quiet；JSON输出：--json；调试模式：--debug"
+      }
+    ],
+    quiz: {
+      question: "以下哪个参数可以添加多个额外的工作目录？",
+      options: ["--work-dir", "--add-dir", "--extra-dir", "--project-dir"],
+      correctAnswer: 1
+    }
+  },
+  {
+    id: 13,
+    root: "Git与代码操作技巧",
+    origin: "实战技巧",
+    meaning: "Git协作与代码操作最佳实践",
+    difficulty: "进阶",
+    duration: "10分钟",
+    description: "Claude Code深度集成Git工作流，可以自动完成代码审查、提交信息生成、版本回退、冲突解决等常见Git操作，大幅提升协作效率。",
+    examples: [
+      {
+        word: "代码审查工作流",
+        meaning: "自动代码审查",
+        breakdown: { root: "实战技巧" },
+        explanation: "审查当前修改：claude -p '审查git diff的代码，指出问题和优化建议'；生成commit信息：claude -p '根据git diff生成符合Conventional Commits规范的提交信息'；检查代码规范：claude -p '检查修改的代码是否符合ESLint/TSLint规范，自动修复可修复的问题'"
+      },
+      {
+        word: "Monorepo支持",
+        meaning: "多包项目适配",
+        breakdown: { root: "实战技巧" },
+        explanation: "Monorepo项目使用--add-dir参数添加多个子包目录；支持pnpm/yarn/npm workspace自动识别；跨包重构时自动同步依赖和类型定义"
+      },
+      {
+        word: "版本管理辅助",
+        meaning: "Git操作自动化",
+        breakdown: { root: "实战技巧" },
+        explanation: "自动解决代码冲突：claude -p '解决当前的Git冲突，保留两边的有效修改'；生成Changelog：claude -p '根据git log生成新版本的Changelog'；版本号自动升级：claude -p '升级package.json的版本号，自动更新相关引用'"
+      }
+    ],
+    quiz: {
+      question: "Claude Code生成的提交信息默认遵循什么规范？",
+      options: ["Angular Commit规范", "Conventional Commits规范", "自定义规范", "Gitmoji规范"],
+      correctAnswer: 1
+    }
+  },
+  {
+    id: 14,
+    root: "高级工作模式",
+    origin: "实战技巧",
+    meaning: "自动接受、计划模式等高级功能",
+    difficulty: "进阶",
+    duration: "8分钟",
+    description: "Claude Code提供多种高级工作模式，适合不同场景使用，包括自动接受模式、计划只读模式、调试模式等，可以大幅提升复杂任务的处理效率。",
+    examples: [
+      {
+        word: "Auto-Accept模式",
+        meaning: "自动接受修改",
+        breakdown: { root: "实战技巧" },
+        explanation: "使用!auto-accept命令开启自动接受模式，文件修改会自动执行，无需手动确认，适合简单任务快速迭代；Shell命令仍需手动确认，保障安全；可以设置只接受指定类型的修改"
+      },
+      {
+        word: "Plan模式",
+        meaning: "只读规划模式",
+        breakdown: { root: "实战技巧" },
+        explanation: "使用!plan命令开启计划模式，Claude只会分析问题和给出执行计划，不会做任何实际修改；适合复杂任务先评估方案，确认后再执行，降低风险"
+      },
+      {
+        word: "会话上下文管理",
+        meaning: "上下文优化技巧",
+        breakdown: { root: "实战技巧" },
+        explanation: "使用!clear命令清空上下文，避免历史信息干扰；使用!forget命令忘记最近的N条消息；使用!save命令保存当前会话到文件，后续可以恢复"
+      }
+    ],
+    quiz: {
+      question: "以下哪种模式下Claude不会修改任何文件？",
+      options: ["Auto-Accept模式", "Plan模式", "Debug模式", "正常模式"],
+      correctAnswer: 1
+    }
+  },
+  {
+    id: 15,
+    root: "高级特性详解",
+    origin: "高级功能",
+    meaning: "MCP/Skills/SubAgents/Plugins核心特性",
+    difficulty: "进阶",
+    duration: "15分钟",
+    description: "全面讲解Claude Code的五大核心高级特性：Plugins插件、MCP模型上下文协议、Skills技能包、SubAgents子代理、Slash Commands斜杠命令，掌握这些特性可以发挥Claude Code的全部潜力。",
+    examples: [
+      {
+        word: "MCP协议",
+        meaning: "外部能力连接器",
+        breakdown: { root: "高级功能" },
+        explanation: "MCP（Model Context Protocol）是Claude访问外部资源的标准协议，支持文件系统、网络搜索、数据库、API等外部能力；内置常用MCP服务器：filesystem文件访问、brave-search网络搜索、github仓库操作、playwright浏览器自动化等"
+      },
+      {
+        word: "Skills技能包",
+        meaning: "自动SOP工作流",
+        breakdown: { root: "高级功能" },
+        explanation: "Skills是可复用的标准化作业流程，Claude会根据场景自动触发；常用技能：代码审查、测试生成、文档生成、部署发布、故障排查等；支持自定义开发私有技能包"
+      },
+      {
+        word: "SubAgents子代理",
+        meaning: "任务拆分执行",
+        breakdown: { root: "高级功能" },
+        explanation: "复杂任务可以拆分为多个子任务，交给不同的子代理并行执行；子代理有独立的上下文和工具权限，执行完成后汇总结果；适合大型项目重构、多模块开发等复杂场景"
+      },
+      {
+        word: "Slash Commands斜杠命令",
+        meaning: "快捷操作指令",
+        breakdown: { root: "高级功能" },
+        explanation: "输入/开头的斜杠命令可以快速执行常用操作：/release发布版本、/test生成测试、/docs生成文档、/debug调试问题等；支持自定义斜杠命令"
+      }
+    ],
+    quiz: {
+      question: "Claude Code中用来访问外部资源的协议是什么？",
+      options: ["MCP协议", "HTTP协议", "GraphQL协议", "REST协议"],
+      correctAnswer: 0
+    }
+  },
+  {
+    id: 16,
+    root: "团队协作最佳实践",
+    origin: "最佳实践",
+    meaning: "企业团队使用Claude Code的规范与技巧",
+    difficulty: "进阶",
+    duration: "10分钟",
+    description: "针对企业团队使用场景，分享Claude Code的权限管理、协作规范、自定义技能开发、安全审计等最佳实践，帮助团队安全高效地使用AI辅助开发。",
+    examples: [
+      {
+        word: "安全规范",
+        meaning: "数据安全保障",
+        breakdown: { root: "最佳实践" },
+        explanation: "敏感代码不上传到公共Claude服务，使用私有部署版本；开启操作审计，所有文件修改和命令执行都有日志记录；禁止AI执行高危命令：rm -rf、数据库修改等操作默认需要二次确认"
+      },
+      {
+        word: "团队自定义配置",
+        meaning: "统一团队工作流",
+        breakdown: { root: "最佳实践" },
+        explanation: "团队统一配置共享系统提示词，强制遵循团队代码规范；开发团队私有技能包，适配内部技术栈和工作流；统一MCP配置，共享内部服务访问能力"
+      },
+      {
+        word: "效率提升技巧",
+        meaning: "团队协作提效",
+        breakdown: { root: "最佳实践" },
+        explanation: "Code Review阶段使用Claude做第一轮自动审查，减少人工工作量；新人入职使用Claude辅助学习项目代码和技术栈；公共组件开发自动生成文档和测试用例"
+      }
+    ],
+    quiz: {
+      question: "企业团队使用Claude Code时，以下哪种做法是不安全的？",
+      options: ["开启操作审计", "使用私有部署版本", "直接上传包含敏感信息的代码", "高危命令二次确认"],
+      correctAnswer: 2
     }
   }
 ]
