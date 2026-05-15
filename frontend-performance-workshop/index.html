@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>前端性能优化学习工坊</title>
+
+  <!-- SEO 基础 -->
+  <meta name="description" content="系统学习前端性能优化，从Core Web Vitals核心指标到各场景优化技巧、性能分析工具和实战案例，每个知识点包含讲解、示例和测验，助你打造极致用户体验的网站。">
+  <meta name="keywords" content="前端性能优化,Core Web Vitals,LCP,FID,CLS,INP,性能分析,Lighthouse,性能监控,Web Vitals">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://CoderLambert.github.io/learning-workshops/frontend-performance-workshop/">
+
+  <!-- Open Graph (社交分享) -->
+  <meta property="og:title" content="前端性能优化学习工坊">
+  <meta property="og:description" content="系统学习前端性能优化，从Core Web Vitals核心指标到各场景优化技巧、性能分析工具和实战案例，每个知识点包含讲解、示例和测验。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://CoderLambert.github.io/learning-workshops/frontend-performance-workshop/">
+  <meta property="og:image" content="https://CoderLambert.github.io/learning-workshops/frontend-performance-workshop/icon-512.png">
+  <meta property="og:site_name" content="前端性能优化学习工坊">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="前端性能优化学习工坊">
+  <meta name="twitter:description" content="系统学习前端性能优化，从Core Web Vitals核心指标到各场景优化技巧、性能分析工具和实战案例。">
+  <meta name="twitter:image" content="https://CoderLambert.github.io/learning-workshops/frontend-performance-workshop/icon-512.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <!-- PWA 支持 -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#10B981">
+
+  <!-- iOS Safari PWA 支持 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="性能优化学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="#" class="nav-logo">⚡ 前端性能优化学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero区 -->
+    <section class="hero">
+      <h1 class="hero-title">
+        18个核心知识点<br>
+        掌握性能优化<br>
+        让网站快如闪电
+      </h1>
+      <p class="hero-subtitle">
+        从核心指标到实战案例，系统学习前端性能优化的各项技能与最佳实践
+      </p>
+      <div class="hero-cta">
+        <a href="./learn.html" class="btn btn-primary">开始第一个知识点 →</a>
+        <a href="./flashcard.html" class="btn btn-secondary">闪卡复习</a>
+      </div>
+    </section>
+
+    <!-- 统计卡片 -->
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-value">18</div>
+        <div class="stat-label">核心知识点</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">6项</div>
+        <div class="stat-label">核心Web指标</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">20分钟</div>
+        <div class="stat-label">每日学习</div>
+      </div>
+    </section>
+
+    <!-- 介绍 -->
+    <section class="card">
+      <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 16px; color: var(--gray-900);">为什么要学习前端性能优化？</h2>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 16px;">
+        前端性能直接影响用户体验和转化率。Google研究表明，页面加载时间从1秒增加到3秒，跳出率增加32%；加载时间超过3秒，53%的移动用户会离开页面。
+      </p>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 16px;">
+        Core Web Vitals（LCP、INP、CLS）已经成为Google搜索排名的重要信号，性能优化不仅是技术问题，也是SEO问题和商业问题。Amazon统计显示，页面每慢100ms，销售额下降1%。
+      </p>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700);">
+        本网站系统梳理了6大核心指标、四大优化场景、三项分析工具以及实战案例，帮助你从理论到实践，全面提升前端性能优化能力。
+      </p>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-tagline">快，是最好的用户体验</div>
+      <p class="footer-description">
+        前端性能直接影响用户体验和转化率。Google研究表明，页面加载时间从1秒增加到3秒，跳出率增加32%。本网站系统梳理了Core Web Vitals核心指标、各场景优化技巧、性能分析工具和实战案例，助你成为前端性能优化专家。
+      </p>
+      <p>© 2025 前端性能优化学习工坊</p>
+    </footer>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习进度 - TailwindCSS v4学习工坊</title>
+
+  <meta name="description" content="查看你的TailwindCSS v4学习进度，掌握情况和学习统计">
+  <meta name="keywords" content="TailwindCSS v4,学习进度,学习统计">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta property="og:title" content="学习进度 - TailwindCSS v4学习工坊">
+  <meta property="og:description" content="查看你的TailwindCSS v4学习进度，掌握情况和学习统计">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tailwindcss4-workshop.vercel.app/progress">
+  <meta property="og:image" content="https://tailwindcss4-workshop.vercel.app/icon-512.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FBBF24">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TailwindCSS学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="#" class="nav-logo">🎨 TailwindCSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress" class="nav-link" style="color: var(--primary);">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2 text-gray-900">学习进度</h1>
+      <p class="text-gray-600">跟踪你的TailwindCSS v4学习情况和掌握程度</p>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="progress-stats">
+      <div class="progress-card">
+        <div class="progress-number" id="total-count">30</div>
+        <div class="progress-label">总知识点</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-number" id="learned-count">0</div>
+        <div class="progress-label">已学习</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-number" id="mastered-count">0</div>
+        <div class="progress-label">已掌握</div>
+      </div>
+      <div class="progress-card">
+        <div class="progress-number" id="progress-percent">0%</div>
+        <div class="progress-label">完成进度</div>
+      </div>
+    </div>
+
+    <!-- 进度条 -->
+    <div class="bg-gray-200 rounded-full h-4 mb-8 overflow-hidden">
+      <div id="progress-bar" class="bg-primary h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+    </div>
+
+    <!-- 操作按钮 -->
+    <div class="flex justify-center gap-4 mb-8">
+      <a href="./learn.html" class="btn btn-primary">继续学习 →</a>
+      <button id="reset-btn" class="btn btn-secondary">重置学习进度</button>
+    </div>
+
+    <!-- 已掌握知识点列表 -->
+    <div class="progress-list">
+      <h2 class="progress-list-title">✅ 已掌握的知识点</h2>
+      <div id="mastered-list" class="space-y-1">
+        <p class="text-gray-500 text-center py-6">还没有掌握任何知识点，加油学习哦~</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    // 初始化
+    function init() {
+      updateStats()
+      renderMasteredList()
+    }
+
+    // 更新统计数据
+    function updateStats() {
+      const stats = Storage.getStats()
+      
+      document.getElementById('total-count').textContent = stats.total
+      document.getElementById('learned-count').textContent = stats.learned
+      document.getElementById('mastered-count').textContent = stats.mastered
+      document.getElementById('progress-percent').textContent = `${stats.progress}%`
+      document.getElementById('progress-bar').style.width = `${stats.progress}%`
+    }
+
+    // 渲染已掌握列表
+    function renderMasteredList() {
+      const masteredIds = Storage.getMastered()
+      const listContainer = document.getElementById('mastered-list')
+
+      if (masteredIds.length === 0) {
+        listContainer.innerHTML = '<p class="text-gray-500 text-center py-6">还没有掌握任何知识点，加油学习哦~</p>'
+        return
+      }
+
+      const masteredItems = WordRoots.filter(item => masteredIds.includes(item.id))
+      
+      listContainer.innerHTML = masteredItems.map(item => `
+        <div class="flex items-center justify-between py-3 px-4 bg-green-50 rounded-lg">
+          <div>
+            <div class="font-medium text-gray-900">${item.root}</div>
+            <div class="text-sm text-gray-500">${item.origin}</div>
+          </div>
+          <a href="./root-detail?id=${item.id}" class="text-primary hover:underline text-sm">查看详情 →</a>
+        </div>
+      `).join('')
+    }
+
+    // 重置进度
+    document.getElementById('reset-btn').addEventListener('click', () => {
+      if (confirm('确定要重置所有学习进度吗？此操作不可恢复！')) {
+        Storage.reset()
+        updateStats()
+        renderMasteredList()
+        alert('学习进度已重置')
+      }
+    })
+
+    init()
+  </script>
+</body>
+</html>

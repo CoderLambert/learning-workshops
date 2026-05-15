@@ -1,0 +1,7 @@
+# 前端性能优化学习工坊
+# https://CoderLambert.github.io/learning-workshops/frontend-performance-workshop/
+
+User-agent: *
+Allow: /
+
+Sitemap: https://CoderLambert.github.io/learning-workshops/frontend-performance-workshop/sitemap.xml
