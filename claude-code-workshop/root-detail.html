@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识点详情 - TailwindCSS v4学习工坊</title>
+
+  <meta name="description" content="TailwindCSS v4知识点详细内容，包含示例代码和测试题">
+  <meta name="keywords" content="TailwindCSS v4,知识点详情,教程">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tailwindcss4-workshop.vercel.app/root-detail">
+
+  <meta property="og:title" content="知识点详情 - TailwindCSS v4学习工坊">
+  <meta property="og:description" content="TailwindCSS v4知识点详细内容，包含示例代码和测试题">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tailwindcss4-workshop.vercel.app/root-detail">
+  <meta property="og:image" content="https://tailwindcss4-workshop.vercel.app/icon-512.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FBBF24">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TailwindCSS学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="./index" class="nav-logo">🎨 TailwindCSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <div class="learn-card card" id="learn-card">
+      <div class="flex items-center justify-between mb-4">
+        <a href="./roots" class="text-primary hover:underline flex items-center gap-1">
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          返回列表
+        </a>
+        <span id="category-tag" class="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-800"></span>
+      </div>
+
+      <div class="learn-card-title" id="card-title">加载中...</div>
+      <div class="learn-card-meta" id="card-meta"></div>
+      <div class="learn-card-description" id="card-description"></div>
+      
+      <div class="learn-card-examples" id="card-examples"></div>
+
+      <div class="quiz" id="quiz-section" style="display: none;">
+        <div class="quiz-question" id="quiz-question"></div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div id="quiz-feedback" class="quiz-feedback" style="display: none;"></div>
+      </div>
+
+      <div class="flex justify-between items-center mt-8">
+        <button id="mark-mastered-btn" class="btn btn-primary">标记为已掌握 ✓</button>
+        <a href="./learn" class="btn btn-secondary">去连续学习 →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    let selectedOption = null
+    let answered = false
+    let currentItem = null
+
+    // 获取URL参数
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search)
+      return urlParams.get(name)
+    }
+
+    // 初始化
+    function init() {
+      const id = parseInt(getQueryParam('id'), 10)
+      if (!id) {
+        alert('参数错误，返回知识点列表')
+        window.location.href = '/roots'
+        return
+      }
+
+      currentItem = WordRoots.find(item => item.id === id)
+      if (!currentItem) {
+        alert('知识点不存在，返回知识点列表')
+        window.location.href = '/roots'
+        return
+      }
+
+      renderItem()
+    }
+
+    // 渲染内容
+    function renderItem() {
+      // 更新页面标题
+      document.title = `${currentItem.root} - TailwindCSS v4学习工坊`
+
+      document.getElementById('category-tag').textContent = currentItem.origin
+      document.getElementById('card-title').textContent = currentItem.root
+      document.getElementById('card-meta').textContent = currentItem.meaning
+      document.getElementById('card-description').textContent = currentItem.description
+
+      // 渲染示例
+      const examplesHtml = currentItem.examples.map(example => `
+        <div class="learn-card-example">
+          <div class="example-title">${example.word}：${example.meaning}</div>
+          <div class="example-code">${escapeHtml(example.explanation)}</div>
+        </div>
+      `).join('')
+      document.getElementById('card-examples').innerHTML = examplesHtml
+
+      // 渲染测试题
+      if (currentItem.quiz) {
+        renderQuiz(currentItem.quiz)
+      } else {
+        document.getElementById('quiz-section').style.display = 'none'
+      }
+
+      // 检查是否已经掌握
+      if (Storage.isMastered(currentItem.id)) {
+        document.getElementById('mark-mastered-btn').textContent = '✓ 已掌握'
+        document.getElementById('mark-mastered-btn').disabled = true
+      }
+
+      // 标记为已学习
+      Storage.markLearned(currentItem.id)
+      Storage.saveLastVisited(currentItem.id)
+    }
+
+    // 渲染测试题
+    function renderQuiz(quiz) {
+      document.getElementById('quiz-section').style.display = 'block'
+      document.getElementById('quiz-question').textContent = quiz.question
+      
+      const optionsHtml = quiz.options.map((option, index) => `
+        <div class="quiz-option" data-index="${index}">${option}</div>
+      `).join('')
+      document.getElementById('quiz-options').innerHTML = optionsHtml
+
+      // 绑定选项点击事件
+      document.querySelectorAll('.quiz-option').forEach(option => {
+        option.addEventListener('click', () => {
+          if (answered) return
+          
+          // 清除之前的选中
+          document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'))
+          
+          // 选中当前
+          option.classList.add('selected')
+          selectedOption = parseInt(option.dataset.index, 10)
+          
+          // 检查答案
+          checkAnswer()
+        })
+      })
+    }
+
+    // 检查答案
+    function checkAnswer() {
+      const quiz = currentItem.quiz
+      if (selectedOption === null) return
+
+      answered = true
+      const feedbackEl = document.getElementById('quiz-feedback')
+      
+      if (selectedOption === quiz.correctAnswer) {
+        feedbackEl.textContent = '✅ 回答正确！'
+        feedbackEl.className = 'quiz-feedback correct'
+        document.querySelector(`.quiz-option[data-index="${selectedOption}"]`).classList.add('correct')
+        // 自动标记为已掌握
+        Storage.markMastered(currentItem.id)
+        document.getElementById('mark-mastered-btn').textContent = '✓ 已掌握'
+        document.getElementById('mark-mastered-btn').disabled = true
+      } else {
+        feedbackEl.textContent = '❌ 回答错误，正确答案是：' + quiz.options[quiz.correctAnswer]
+        feedbackEl.className = 'quiz-feedback incorrect'
+        document.querySelector(`.quiz-option[data-index="${selectedOption}"]`).classList.add('incorrect')
+        document.querySelector(`.quiz-option[data-index="${quiz.correctAnswer}"]`).classList.add('correct')
+      }
+
+      feedbackEl.style.display = 'block'
+    }
+
+    // 标记为已掌握
+    document.getElementById('mark-mastered-btn').addEventListener('click', () => {
+      Storage.markMastered(currentItem.id)
+      document.getElementById('mark-mastered-btn').textContent = '✓ 已掌握'
+      document.getElementById('mark-mastered-btn').disabled = true
+    })
+
+    // HTML转义
+    function escapeHtml(text) {
+      const div = document.createElement('div')
+      div.textContent = text
+      return div.innerHTML
+    }
+
+    init()
+  </script>
+</body>
+</html>

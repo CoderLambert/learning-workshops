@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code 学习工坊</title>
+
+  <!-- SEO 基础 -->
+  <meta name="description" content="Claude Code是Anthropic推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求。本网站系统整理了Claude Code的核心功能、使用技巧和最佳实践，帮助你快速掌握这款强大的AI开发工具。">
+  <meta name="keywords" content="Claude Code,学习,AI编程,大模型,代码生成,Anthropic,开发效率">
+  <meta name="author" content="李志">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://CoderLambert.github.io/learning-workshops/claude-code-workshop/">
+
+  <!-- Open Graph (社交分享) -->
+  <meta property="og:title" content="Claude Code 学习工坊">
+  <meta property="og:description" content="Claude Code是Anthropic推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求。本网站系统整理了Claude Code的核心功能、使用技巧和最佳实践，帮助你快速掌握这款强大的AI开发工具。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://CoderLambert.github.io/learning-workshops/claude-code-workshop/">
+  <meta property="og:image" content="https://CoderLambert.github.io/learning-workshops/claude-code-workshop/icon-512.png">
+  <meta property="og:site_name" content="Claude Code 学习工坊">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Claude Code 学习工坊">
+  <meta name="twitter:description" content="Claude Code是Anthropic推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求。本网站系统整理了Claude Code的核心功能、使用技巧和最佳实践，帮助你快速掌握这款强大的AI开发工具。">
+  <meta name="twitter:image" content="https://CoderLambert.github.io/learning-workshops/claude-code-workshop/icon-512.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <!-- PWA 支持 -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FBBF24">
+
+  <!-- iOS Safari PWA 支持 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TailwindCSS学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo">🤖 Claude Code学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero区 -->
+    <section class="hero">
+      <h1 class="hero-title">
+        10个核心知识点<br>
+        掌握Claude Code<br>
+        开发效率10倍提升
+      </h1>
+      <p class="hero-subtitle">
+        从基础使用到高级集成，系统学习Claude Code核心功能、使用技巧和最佳实践
+      </p>
+      <div class="hero-cta">
+        <a href="./learn.html" class="btn btn-primary">开始第一个知识点 →</a>
+        <a href="./flashcard.html" class="btn btn-secondary">闪卡复习</a>
+      </div>
+    </section>
+
+    <!-- 统计卡片 -->
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-value">10</div>
+        <div class="stat-label">核心知识点</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">全场景</div>
+        <div class="stat-label">开发支持</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">1小时</div>
+        <div class="stat-label">快速上手</div>
+      </div>
+    </section>
+
+    <!-- 介绍 -->
+    <section class="card">
+      <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 16px; color: var(--gray-900);">什么是Claude Code？</h2>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 16px;">
+        Claude Code是Anthropic推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求，支持100+编程语言。
+      </p>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 16px;">
+        与其他AI代码助手相比，Claude Code拥有更长的上下文窗口、更高的代码质量、更好的安全性，支持复杂项目级开发任务，是现代开发者的必备效率工具。
+      </p>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700);">
+        本网站系统整理了Claude Code的核心功能、使用技巧、最佳实践和常见问题解决方案，帮助你快速掌握这款强大的AI开发工具，大幅提升开发效率。
+      </p>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-tagline">AI赋能，开发效率10倍提升</div>
+      <p class="footer-description">
+        Claude Code是Anthropic推出的专业AI代码助手，基于Claude 3系列大模型，支持代码生成、解释、调试、重构等全场景开发需求。本网站系统整理了Claude Code的核心功能、使用技巧和最佳实践，帮助你快速掌握这款强大的AI开发工具。
+      </p>
+      <p>© 2026 Claude Code学习工坊</p>
+    </footer>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+</body>
+</html>
