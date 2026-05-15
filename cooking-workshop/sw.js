@@ -1,5 +1,5 @@
 const BASE_PATH = './';
-const CACHE_NAME = 'tailwindcss4-workshop-v2';
+const CACHE_NAME = 'cooking-workshop-v1';
 const ASSETS_TO_CACHE = [
   BASE_PATH,
   BASE_PATH + 'index.html',
