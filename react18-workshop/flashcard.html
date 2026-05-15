@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闪卡复习 - TailwindCSS v4学习工坊</title>
+
+  <meta name="description" content="使用闪卡模式高效复习TailwindCSS v4知识点，支持翻牌和键盘快捷键">
+  <meta name="keywords" content="TailwindCSS v4,闪卡复习,记忆卡片">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tailwindcss4-workshop.vercel.app/flashcard">
+
+  <meta property="og:title" content="闪卡复习 - TailwindCSS v4学习工坊">
+  <meta property="og:description" content="使用闪卡模式高效复习TailwindCSS v4知识点，支持翻牌和键盘快捷键">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tailwindcss4-workshop.vercel.app/flashcard">
+  <meta property="og:image" content="https://tailwindcss4-workshop.vercel.app/icon-512.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FBBF24">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TailwindCSS学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="#" class="nav-logo">🎨 TailwindCSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard" class="nav-link" style="color: var(--primary);">闪卡复习</a></li>
+        <li><a href="./roots" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2 text-gray-900">闪卡复习模式</h1>
+      <p class="text-gray-600">点击卡片翻转查看答案，使用键盘 ← → 切换卡片，空格键翻转</p>
+      <div class="mt-4 text-sm text-gray-500">
+        <span id="current-index">1</span> / <span id="total-count">30</span>
+      </div>
+    </div>
+
+    <div class="flashcard" id="flashcard">
+      <div class="flashcard-inner">
+        <!-- 卡片正面 -->
+        <div class="flashcard-front">
+          <div class="text-xl font-semibold text-gray-500 mb-4">问题：</div>
+          <h2 class="text-2xl font-bold text-gray-900 mb-6" id="card-question">加载中...</h2>
+          <p class="text-gray-500 text-sm">点击卡片查看答案 ↓</p>
+        </div>
+        <!-- 卡片背面 -->
+        <div class="flashcard-back">
+          <div class="text-xl font-semibold text-gray-500 mb-4">答案：</div>
+          <div class="text-lg text-gray-700 leading-relaxed" id="card-answer"></div>
+          <p class="text-gray-500 text-sm mt-6">点击卡片返回问题 ↑</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-8">
+      <button id="prev-btn" class="btn btn-secondary">← 上一张</button>
+      <button id="flip-btn" class="btn btn-primary">翻转卡片</button>
+      <button id="next-btn" class="btn btn-secondary">下一张 →</button>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-4">
+      <button id="mark-known-btn" class="btn bg-green-50 hover:bg-green-100 text-green-700">✅ 我已经掌握</button>
+    </div>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    let currentIndex = 0
+    let isFlipped = false
+
+    // 初始化
+    function init() {
+      document.getElementById('total-count').textContent = WordRoots.length
+      // 从上次学习位置继续
+      const lastVisited = Storage.getLastVisited()
+      if (lastVisited) {
+        const index = WordRoots.findIndex(item => item.id === lastVisited)
+        if (index !== -1) currentIndex = index
+      }
+      renderCard()
+      updateIndexDisplay()
+    }
+
+    // 渲染卡片
+    function renderCard() {
+      const item = WordRoots[currentIndex]
+      if (!item) return
+
+      document.getElementById('card-question').textContent = `${item.root}\n${item.meaning}`
+      document.getElementById('card-answer').textContent = item.description
+
+      // 重置翻转状态
+      if (isFlipped) {
+        document.getElementById('flashcard').classList.remove('flipped')
+        isFlipped = false
+      }
+
+      // 更新按钮状态
+      document.getElementById('prev-btn').disabled = currentIndex === 0
+      document.getElementById('next-btn').disabled = currentIndex === WordRoots.length - 1
+
+      // 检查是否已经掌握
+      if (Storage.isMastered(item.id)) {
+        document.getElementById('mark-known-btn').textContent = '✅ 已掌握'
+        document.getElementById('mark-known-btn').disabled = true
+      } else {
+        document.getElementById('mark-known-btn').textContent = '✅ 我已经掌握'
+        document.getElementById('mark-known-btn').disabled = false
+      }
+
+      Storage.markLearned(item.id)
+      Storage.saveLastVisited(item.id)
+    }
+
+    // 翻转卡片
+    function flipCard() {
+      document.getElementById('flashcard').classList.toggle('flipped')
+      isFlipped = !isFlipped
+    }
+
+    // 上一张
+    function prevCard() {
+      if (currentIndex > 0) {
+        currentIndex--
+        renderCard()
+        updateIndexDisplay()
+      }
+    }
+
+    // 下一张
+    function nextCard() {
+      if (currentIndex < WordRoots.length - 1) {
+        currentIndex++
+        renderCard()
+        updateIndexDisplay()
+      } else {
+        alert('🎉 已经复习完所有知识点啦！')
+      }
+    }
+
+    // 更新索引显示
+    function updateIndexDisplay() {
+      document.getElementById('current-index').textContent = currentIndex + 1
+    }
+
+    // 标记为已掌握
+    function markAsKnown() {
+      const item = WordRoots[currentIndex]
+      Storage.markMastered(item.id)
+      document.getElementById('mark-known-btn').textContent = '✅ 已掌握'
+      document.getElementById('mark-known-btn').disabled = true
+      setTimeout(() => {
+        nextCard()
+      }, 500)
+    }
+
+    // 事件绑定
+    document.getElementById('flashcard').addEventListener('click', flipCard)
+    document.getElementById('flip-btn').addEventListener('click', flipCard)
+    document.getElementById('prev-btn').addEventListener('click', prevCard)
+    document.getElementById('next-btn').addEventListener('click', nextCard)
+    document.getElementById('mark-known-btn').addEventListener('click', markAsKnown)
+
+    // 键盘快捷键
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') prevCard()
+      if (e.key === 'ArrowRight') nextCard()
+      if (e.key === ' ') {
+        e.preventDefault()
+        flipCard()
+      }
+    })
+
+    init()
+  </script>
+</body>
+</html>

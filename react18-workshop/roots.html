@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识点索引 - TailwindCSS v4学习工坊</title>
+
+  <meta name="description" content="TailwindCSS v4所有知识点索引，支持搜索和分类筛选，快速查找你需要的内容">
+  <meta name="keywords" content="TailwindCSS v4,知识点索引,文档,教程">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://tailwindcss4-workshop.vercel.app/roots">
+
+  <meta property="og:title" content="知识点索引 - TailwindCSS v4学习工坊">
+  <meta property="og:description" content="TailwindCSS v4所有知识点索引，支持搜索和分类筛选，快速查找你需要的内容">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://tailwindcss4-workshop.vercel.app/roots">
+  <meta property="og:image" content="https://tailwindcss4-workshop.vercel.app/icon-512.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FBBF24">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TailwindCSS学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="#" class="nav-logo">🎨 TailwindCSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots" class="nav-link" style="color: var(--primary);">知识点索引</a></li>
+        <li><a href="./progress" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2 text-gray-900">知识点索引</h1>
+      <p class="text-gray-600">共 <span id="total-count">30</span> 个知识点，搜索关键词快速查找</p>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="search-box">
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="搜索知识点名称、描述关键词..." 
+        class="search-input"
+      >
+    </div>
+
+    <!-- 分类筛选 -->
+    <div class="flex flex-wrap gap-2 justify-center mb-8">
+      <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-category="all">全部</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="React 18 新特性">React 18 新特性</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="React 18 Hooks">React 18 Hooks</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="Server Components">Server Components</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="Next.js App Router">Next.js App Router</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="React 生态工具">React 生态工具</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="性能优化">性能优化</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="最佳实践">最佳实践</button>
+    </div>
+
+    <!-- 知识点卡片网格 -->
+    <div class="roots-grid" id="roots-grid">
+      <!-- JS动态生成 -->
+    </div>
+
+    <div id="no-result" class="text-center py-12 text-gray-500 hidden">
+      <svg class="h-16 w-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h1m4 0h1m-7 4h.01M12 3h.01M3 21h18a2 2 0 002-2V5a2 2 0 00-2-2H3a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+      <p>没有找到匹配的知识点，请尝试其他关键词</p>
+    </div>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    let currentCategory = 'all'
+    let searchKeyword = ''
+
+    // 初始化
+    function init() {
+      document.getElementById('total-count').textContent = WordRoots.length
+      renderCards()
+    }
+
+    // 渲染卡片
+    function renderCards() {
+      const filteredItems = WordRoots.filter(item => {
+        // 分类筛选
+        if (currentCategory !== 'all' && item.origin !== currentCategory) {
+          return false
+        }
+        // 关键词搜索
+        if (searchKeyword) {
+          const keyword = searchKeyword.toLowerCase()
+          return (
+            item.root.toLowerCase().includes(keyword) ||
+            item.meaning.toLowerCase().includes(keyword) ||
+            item.description.toLowerCase().includes(keyword) ||
+            item.origin.toLowerCase().includes(keyword)
+          )
+        }
+        return true
+      })
+
+      const grid = document.getElementById('roots-grid')
+      const noResult = document.getElementById('no-result')
+
+      if (filteredItems.length === 0) {
+        grid.innerHTML = ''
+        noResult.classList.remove('hidden')
+        return
+      }
+
+      noResult.classList.add('hidden')
+      grid.innerHTML = filteredItems.map(item => {
+        const isMastered = Storage.isMastered(item.id)
+        const isLearned = Storage.isLearned(item.id)
+        
+        return `
+          <a href="./root-detail?id=${item.id}" class="root-card group">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-medium px-2 py-1 rounded-full ${
+                item.origin.includes('v4新特性') 
+                  ? 'bg-yellow-100 text-yellow-800' 
+                  : 'bg-blue-100 text-blue-800'
+              }">${item.origin}</span>
+              ${isMastered ? '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">✅ 已掌握</span>' : ''}
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">${item.root}</h3>
+            <p class="text-gray-600 text-sm line-clamp-2">${item.meaning}</p>
+          </a>
+        `
+      }).join('')
+    }
+
+    // 搜索事件
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchKeyword = e.target.value.trim()
+      renderCards()
+    })
+
+    // 分类筛选事件
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentCategory = btn.dataset.category
+        
+        // 更新按钮样式
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-primary/10', 'text-primary')
+          b.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200')
+        })
+        btn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200')
+        btn.classList.add('bg-primary/10', 'text-primary')
+
+        renderCards()
+      })
+    })
+
+    init()
+  </script>
+</body>
+</html>
