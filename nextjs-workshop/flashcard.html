@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闪卡 - Next.js 前端工程师知识工坊</title>
+  <meta name="description" content="使用闪卡模式快速复习 Next.js 知识点，支持键盘操作。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minimal.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">⚡ Next.js 16 知识工坊</a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">首页</a></li>
+        <li><a href="learn.html" class="nav-link">学习</a></li>
+        <li><a href="flashcard.html" class="nav-link active">闪卡</a></li>
+        <li><a href="roots.html" class="nav-link">索引</a></li>
+        <li><a href="progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="flashcard-container">
+    <div class="text-center mb-lg">
+      <h1 style="font-size:2rem;font-weight:800;">闪卡复习</h1>
+      <p style="color:var(--color-text-secondary);font-size:0.9rem;">点击卡片翻转 · ← → 切换 · 空格翻转</p>
+    </div>
+
+    <div class="flashcard" id="flashcard" onclick="flipCard()">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="flashcard-root" id="frontRoot">-</div>
+          <div class="flashcard-meaning" id="frontMeaning">-</div>
+          <div class="flashcard-origin" id="frontOrigin">-</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="flashcard-root" id="backRoot">-</div>
+          <div class="flashcard-description" id="backDescription">-</div>
+          <div class="flashcard-examples" id="backExamples"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flashcard-progress">
+      <span id="flashcardProgress"></span>
+      ·
+      <span id="masteredCount"></span>
+    </div>
+
+    <div class="flashcard-nav">
+      <button class="btn btn-secondary" id="prevBtn">← 上一张</button>
+      <button class="btn btn-primary" id="masterBtn" style="padding:12px 20px;">✓ 标记掌握</button>
+      <button class="btn btn-secondary" id="nextBtn">下一张 →</button>
+    </div>
+  </main>
+
+  <script src="js/siteConfig.js"></script>
+  <script src="js/wordData.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    (function() {
+      let currentIndex = 0;
+      const normalizeIndex = (i, len) => ((i % len) + len) % len;
+
+      function loadCard(index) {
+        const safeIndex = normalizeIndex(index, WordRoots.length);
+        currentIndex = safeIndex;
+        const root = WordRoots[safeIndex];
+
+        // Reset flip
+        document.getElementById('flashcard')?.classList.remove('flipped');
+
+        // Front
+        const frontRoot = document.getElementById('frontRoot');
+        if (frontRoot) frontRoot.textContent = root.root;
+        const frontMeaning = document.getElementById('frontMeaning');
+        if (frontMeaning) frontMeaning.textContent = root.meaning;
+        const frontOrigin = document.getElementById('frontOrigin');
+        if (frontOrigin) frontOrigin.textContent = root.origin;
+
+        // Back
+        const backRoot = document.getElementById('backRoot');
+        if (backRoot) backRoot.textContent = root.root;
+        const backDesc = document.getElementById('backDescription');
+        if (backDesc) backDesc.textContent = root.description;
+
+        // Progress
+        const progEl = document.getElementById('flashcardProgress');
+        if (progEl) progEl.textContent = (safeIndex + 1) + ' / ' + WordRoots.length;
+        const mCountEl = document.getElementById('masteredCount');
+        if (mCountEl) mCountEl.textContent = '已掌握 ' + StorageManager.getMasteredCount() + ' 个';
+
+        // Master button
+        const isMastered = StorageManager.isMastered(root.id);
+        const masterBtn = document.getElementById('masterBtn');
+        if (masterBtn) {
+          masterBtn.textContent = isMastered ? '✓ 已掌握' : '✓ 标记掌握';
+          masterBtn.style.opacity = isMastered ? '0.6' : '1';
+        }
+      }
+
+      window.flipCard = function() {
+        document.getElementById('flashcard')?.classList.toggle('flipped');
+      };
+
+      document.getElementById('prevBtn')?.addEventListener('click', (e) => { e.stopPropagation(); loadCard(currentIndex - 1); });
+      document.getElementById('nextBtn')?.addEventListener('click', (e) => { e.stopPropagation(); loadCard(currentIndex + 1); });
+      document.getElementById('masterBtn')?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const root = WordRoots[currentIndex];
+        StorageManager.markRootAsMastered(root.id);
+        loadCard(currentIndex);
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') loadCard(currentIndex - 1);
+        if (e.key === 'ArrowRight') loadCard(currentIndex + 1);
+        if (e.key === ' ') { e.preventDefault(); flipCard(); }
+      });
+
+      loadCard(0);
+    })();
+  </script>
+</body>
+</html>

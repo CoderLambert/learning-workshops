@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识点详情 - Next.js 前端工程师知识工坊</title>
+  <meta name="description" content="查看 Next.js 知识点详情、案例和测试题。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minimal.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">⚡ Next.js 16 知识工坊</a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">首页</a></li>
+        <li><a href="learn.html" class="nav-link">学习</a></li>
+        <li><a href="flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="roots.html" class="nav-link active">索引</a></li>
+        <li><a href="progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="detail-container">
+    <a href="roots.html" class="detail-back">← 返回索引</a>
+
+    <div id="detailContent">
+      <div class="detail-header">
+        <h1 class="detail-title" id="detailTitle"></h1>
+        <div class="detail-origin" id="detailOrigin"></div>
+        <p class="detail-meaning" id="detailMeaning"></p>
+      </div>
+
+      <div class="detail-description" id="detailDescription"></div>
+
+      <div class="detail-examples">
+        <h3>📌 实战案例</h3>
+        <div id="detailExamples"></div>
+      </div>
+
+      <div class="learn-card" style="margin-top:var(--space-xl);">
+        <div class="quiz-section" style="border-top:none;padding-top:0;">
+          <p class="quiz-question" id="quizQuestion"></p>
+          <div class="quiz-options" id="quizOptions"></div>
+        </div>
+      </div>
+
+      <div class="detail-actions">
+        <button class="btn btn-primary" id="masterBtn">✓ 标记为已掌握</button>
+        <a href="learn.html" class="btn btn-secondary">继续学习</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/siteConfig.js"></script>
+  <script src="js/wordData.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const id = parseInt(params.get('id'), 10);
+      const root = WordRoots.find(r => r.id === id);
+
+      if (!root) {
+        document.getElementById('detailContent').innerHTML = '<p style="text-align:center;padding:var(--space-4xl);color:var(--color-text-tertiary);">知识点未找到</p>';
+        return;
+      }
+
+      document.title = root.root + ' - Next.js 前端工程师知识工坊';
+
+      document.getElementById('detailTitle').textContent = root.root;
+      document.getElementById('detailOrigin').textContent = root.origin;
+      document.getElementById('detailMeaning').textContent = root.meaning;
+      document.getElementById('detailDescription').textContent = root.description;
+
+      // Examples
+      const exContainer = document.getElementById('detailExamples');
+      root.examples.forEach(ex => {
+        const div = document.createElement('div');
+        div.className = 'example-item';
+        div.style.marginBottom = 'var(--space-sm)';
+        const strong = document.createElement('strong');
+        strong.textContent = ex.word;
+        const p = document.createElement('p');
+        p.textContent = ex.explanation;
+        div.appendChild(strong);
+        div.appendChild(p);
+        exContainer.appendChild(div);
+      });
+
+      // Quiz
+      const qEl = document.getElementById('quizQuestion');
+      if (qEl) qEl.textContent = '❓ ' + root.quiz.question;
+      const optContainer = document.getElementById('quizOptions');
+      if (optContainer) {
+        root.quiz.options.forEach((opt, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'quiz-option';
+          btn.textContent = String.fromCharCode(65 + i) + '. ' + opt;
+          btn.addEventListener('click', function() { checkAnswer(i, root.quiz.correctAnswer); });
+          optContainer.appendChild(btn);
+        });
+      }
+
+      // Master
+      const isMastered = StorageManager.isMastered(root.id);
+      const masterBtn = document.getElementById('masterBtn');
+      if (masterBtn) {
+        masterBtn.textContent = isMastered ? '✓ 已掌握' : '✓ 标记为已掌握';
+        if (isMastered) masterBtn.style.opacity = '0.6';
+        masterBtn.addEventListener('click', function() {
+          StorageManager.markRootAsMastered(root.id);
+          this.textContent = '✓ 已掌握';
+          this.style.opacity = '0.6';
+          showFeedback('✓ 已标记为掌握！', true);
+        });
+      }
+
+      function checkAnswer(selected, correct) {
+        const options = document.querySelectorAll('.quiz-option');
+        options.forEach((btn, i) => {
+          btn.disabled = true;
+          if (i === correct) btn.classList.add('correct');
+          else if (i === selected && selected !== correct) btn.classList.add('wrong');
+        });
+        if (selected === correct) showFeedback('✓ 回答正确！', true);
+        else showFeedback('✗ 回答错误，正确答案是 ' + String.fromCharCode(65 + correct), false);
+      }
+
+      function showFeedback(message, isSuccess) {
+        const toast = document.createElement('div');
+        toast.className = 'feedback-toast ' + (isSuccess ? 'success' : 'error');
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+    })();
+  </script>
+</body>
+</html>

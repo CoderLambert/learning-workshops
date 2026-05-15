@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>索引 - Next.js 前端工程师知识工坊</title>
+  <meta name="description" content="浏览所有 Next.js 知识点，支持搜索和筛选。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minimal.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">⚡ Next.js 16 知识工坊</a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">首页</a></li>
+        <li><a href="learn.html" class="nav-link">学习</a></li>
+        <li><a href="flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="roots.html" class="nav-link active">索引</a></li>
+        <li><a href="progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="roots-container">
+    <div class="roots-header">
+      <h1 style="font-size:2rem;font-weight:800;">知识点索引</h1>
+      <p style="color:var(--color-text-secondary);">共 <span id="totalCount"></span> 个知识点</p>
+    </div>
+
+    <div class="search-filter">
+      <input type="text" class="search-input" id="searchInput" placeholder="搜索知识点...">
+      <select class="filter-select" id="filterSelect">
+        <option value="all">全部分类</option>
+      </select>
+    </div>
+
+    <div class="roots-grid" id="rootsGrid"></div>
+  </main>
+
+  <script src="js/siteConfig.js"></script>
+  <script src="js/wordData.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    (function() {
+      const progress = StorageManager.getProgress();
+      const masteredIds = new Set(progress.masteredRoots);
+
+      // Populate filter
+      const origins = [...new Set(WordRoots.map(r => r.origin))];
+      const filterSelect = document.getElementById('filterSelect');
+      origins.forEach(origin => {
+        const opt = document.createElement('option');
+        opt.value = origin;
+        opt.textContent = origin;
+        filterSelect.appendChild(opt);
+      });
+
+      const totalCountEl = document.getElementById('totalCount');
+      if (totalCountEl) totalCountEl.textContent = WordRoots.length;
+
+      function createCard(root) {
+        const card = document.createElement('div');
+        card.className = 'root-card card';
+        card.onclick = () => { window.location.href = 'root-detail.html?id=' + root.id; };
+
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'root-name';
+        nameDiv.textContent = root.root;
+
+        const meaningDiv = document.createElement('div');
+        meaningDiv.className = 'root-meaning';
+        meaningDiv.textContent = root.meaning;
+
+        const originDiv = document.createElement('div');
+        originDiv.className = 'root-origin-tag';
+        originDiv.textContent = root.origin;
+
+        card.appendChild(nameDiv);
+        card.appendChild(meaningDiv);
+        card.appendChild(originDiv);
+
+        if (masteredIds.has(root.id)) {
+          const badge = document.createElement('span');
+          badge.className = 'mastered-badge';
+          badge.textContent = '✓ 已掌握';
+          card.appendChild(badge);
+        }
+
+        return card;
+      }
+
+      function renderRoots(roots) {
+        const container = document.getElementById('rootsGrid');
+        if (!container) return;
+        container.innerHTML = '';
+        roots.forEach(root => container.appendChild(createCard(root)));
+      }
+
+      // Search
+      const searchInput = document.getElementById('searchInput');
+      searchInput?.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const origin = filterSelect?.value || 'all';
+        applyFilter(query, origin);
+      });
+
+      // Filter
+      filterSelect?.addEventListener('change', function() {
+        const query = searchInput?.value.toLowerCase() || '';
+        applyFilter(query, this.value);
+      });
+
+      function applyFilter(query, origin) {
+        let filtered = WordRoots;
+        if (query) {
+          filtered = filtered.filter(r =>
+            r.root.toLowerCase().includes(query) ||
+            r.meaning.toLowerCase().includes(query) ||
+            r.origin.toLowerCase().includes(query)
+          );
+        }
+        if (origin !== 'all') {
+          filtered = filtered.filter(r => r.origin === origin);
+        }
+        renderRoots(filtered);
+      }
+
+      renderRoots(WordRoots);
+    })();
+  </script>
+</body>
+</html>

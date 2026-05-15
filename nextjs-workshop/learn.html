@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习 - Next.js 前端工程师知识工坊</title>
+  <meta name="description" content="渐进式学习 Next.js 核心知识点，逐个掌握概念。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minimal.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">⚡ Next.js 16 知识工坊</a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">首页</a></li>
+        <li><a href="learn.html" class="nav-link active">学习</a></li>
+        <li><a href="flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="roots.html" class="nav-link">索引</a></li>
+        <li><a href="progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="learn-container">
+    <div class="learn-header">
+      <h1 style="font-size:2rem;font-weight:800;">渐进学习</h1>
+      <p style="color:var(--color-text-secondary);">按顺序逐个掌握知识点，使用键盘 ← → 导航</p>
+    </div>
+
+    <div class="learn-card" id="learnCard">
+      <h2 id="rootName"></h2>
+      <span class="origin-tag" id="rootOrigin"></span>
+      <p class="learn-description" id="rootDescription"></p>
+
+      <div class="examples-section">
+        <h3>📌 实战案例</h3>
+        <div id="examplesContainer"></div>
+      </div>
+
+      <div class="quiz-section">
+        <p class="quiz-question" id="quizQuestion"></p>
+        <div class="quiz-options" id="quizOptions"></div>
+      </div>
+
+      <div style="margin-top:var(--space-md);display:flex;gap:var(--space-sm);align-items:center;">
+        <button class="btn btn-secondary" id="masterBtn" style="padding:8px 16px;font-size:0.9rem;">✓ 标记为已掌握</button>
+        <span id="masteredStatus" style="color:var(--color-success);font-size:0.85rem;font-weight:500;display:none;">✓ 已掌握</span>
+      </div>
+    </div>
+
+    <div class="learn-nav">
+      <button class="btn btn-secondary" id="prevBtn">← 上一个</button>
+      <span id="learnProgress" style="color:var(--color-text-secondary);font-size:0.9rem;"></span>
+      <button class="btn btn-primary" id="nextBtn">下一个 →</button>
+    </div>
+  </main>
+
+  <script src="js/siteConfig.js"></script>
+  <script src="js/wordData.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    (function() {
+      let currentIndex = StorageManager.getProgress().currentRootIndex || 0;
+      const normalizeIndex = (i, len) => ((i % len) + len) % len;
+
+      function loadRoot(index) {
+        const safeIndex = normalizeIndex(index, WordRoots.length);
+        currentIndex = safeIndex;
+        const root = WordRoots[safeIndex];
+
+        const nameEl = document.getElementById('rootName');
+        if (nameEl) nameEl.textContent = root.root;
+        const originEl = document.getElementById('rootOrigin');
+        if (originEl) originEl.textContent = root.origin;
+        const descEl = document.getElementById('rootDescription');
+        if (descEl) descEl.textContent = root.description;
+
+        // Examples
+        const exContainer = document.getElementById('examplesContainer');
+        if (exContainer) {
+          exContainer.innerHTML = '';
+          root.examples.forEach(ex => {
+            const div = document.createElement('div');
+            div.className = 'example-item';
+            const strong = document.createElement('strong');
+            strong.textContent = ex.word;
+            const p = document.createElement('p');
+            p.textContent = ex.meaning + ' — ' + ex.explanation;
+            div.appendChild(strong);
+            div.appendChild(p);
+            exContainer.appendChild(div);
+          });
+        }
+
+        // Quiz
+        const qEl = document.getElementById('quizQuestion');
+        if (qEl) qEl.textContent = '❓ ' + root.quiz.question;
+        const optContainer = document.getElementById('quizOptions');
+        if (optContainer) {
+          optContainer.innerHTML = '';
+          root.quiz.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'quiz-option';
+            btn.textContent = String.fromCharCode(65 + i) + '. ' + opt;
+            btn.addEventListener('click', function() { checkAnswer(i, root.quiz.correctAnswer); });
+            optContainer.appendChild(btn);
+          });
+        }
+
+        // Mastered status
+        const isMastered = StorageManager.isMastered(root.id);
+        const masterBtn = document.getElementById('masterBtn');
+        const statusEl = document.getElementById('masteredStatus');
+        if (masterBtn) { masterBtn.style.display = isMastered ? 'none' : ''; }
+        if (statusEl) { statusEl.style.display = isMastered ? '' : 'none'; }
+
+        const progEl = document.getElementById('learnProgress');
+        if (progEl) progEl.textContent = (safeIndex + 1) + ' / ' + WordRoots.length;
+        StorageManager.updateProgress(safeIndex);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      function checkAnswer(selected, correct) {
+        const options = document.querySelectorAll('.quiz-option');
+        options.forEach((btn, i) => {
+          btn.disabled = true;
+          if (i === correct) btn.classList.add('correct');
+          else if (i === selected && selected !== correct) btn.classList.add('wrong');
+        });
+        if (selected === correct) {
+          showFeedback('✓ 回答正确！', true);
+        } else {
+          showFeedback('✗ 回答错误，正确答案是 ' + String.fromCharCode(65 + correct), false);
+        }
+      }
+
+      function showFeedback(message, isSuccess) {
+        const toast = document.createElement('div');
+        toast.className = 'feedback-toast ' + (isSuccess ? 'success' : 'error');
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+
+      document.getElementById('prevBtn')?.addEventListener('click', () => loadRoot(currentIndex - 1));
+      document.getElementById('nextBtn')?.addEventListener('click', () => loadRoot(currentIndex + 1));
+
+      document.getElementById('masterBtn')?.addEventListener('click', function() {
+        const root = WordRoots[currentIndex];
+        StorageManager.markRootAsMastered(root.id);
+        this.style.display = 'none';
+        document.getElementById('masteredStatus').style.display = '';
+        showFeedback('✓ 已标记为掌握！', true);
+      });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') loadRoot(currentIndex - 1);
+        if (e.key === 'ArrowRight') loadRoot(currentIndex + 1);
+      });
+
+      loadRoot(currentIndex);
+    })();
+  </script>
+</body>
+</html>

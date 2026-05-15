@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>进度 - Next.js 前端工程师知识工坊</title>
+  <meta name="description" content="查看你的 Next.js 学习进度和已掌握知识点。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minimal.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">⚡ Next.js 16 知识工坊</a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">首页</a></li>
+        <li><a href="learn.html" class="nav-link">学习</a></li>
+        <li><a href="flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="roots.html" class="nav-link">索引</a></li>
+        <li><a href="progress.html" class="nav-link active">进度</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="progress-container">
+    <div class="progress-header">
+      <h1 style="font-size:2rem;font-weight:800;">学习进度</h1>
+      <p style="color:var(--color-text-secondary);">坚持每日学习，掌握所有知识点</p>
+    </div>
+
+    <div class="progress-stats">
+      <div class="progress-stat-card">
+        <div class="progress-stat-value" id="masteredCount">0</div>
+        <div class="progress-stat-label">已掌握</div>
+      </div>
+      <div class="progress-stat-card">
+        <div class="progress-stat-value" id="totalCount">0</div>
+        <div class="progress-stat-label">总计</div>
+      </div>
+      <div class="progress-stat-card">
+        <div class="progress-stat-value" id="percentage">0%</div>
+        <div class="progress-stat-label">完成率</div>
+      </div>
+    </div>
+
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar" style="width:0%"></div>
+    </div>
+
+    <h3 style="font-size:1.25rem;font-weight:600;margin-bottom:var(--space-md);">已掌握知识点</h3>
+    <div class="mastered-list" id="masteredList"></div>
+
+    <div style="margin-top:var(--space-2xl);text-align:center;">
+      <button class="btn btn-secondary" id="resetBtn" style="color:var(--color-error);border-color:var(--color-error);">重置进度</button>
+    </div>
+  </main>
+
+  <script src="js/siteConfig.js"></script>
+  <script src="js/wordData.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    (function() {
+      const progress = StorageManager.getProgress();
+      const masteredCount = progress.masteredRoots.length;
+      const totalCount = WordRoots.length;
+      const percentage = totalCount > 0 ? Math.round((masteredCount / totalCount) * 100) : 0;
+
+      const mCountEl = document.getElementById('masteredCount');
+      if (mCountEl) mCountEl.textContent = masteredCount;
+      const tCountEl = document.getElementById('totalCount');
+      if (tCountEl) tCountEl.textContent = totalCount;
+      const pEl = document.getElementById('percentage');
+      if (pEl) pEl.textContent = percentage + '%';
+
+      const progressBar = document.getElementById('progressBar');
+      if (progressBar) progressBar.style.width = percentage + '%';
+
+      // Render mastered list
+      const listEl = document.getElementById('masteredList');
+      if (listEl) {
+        if (masteredCount === 0) {
+          const empty = document.createElement('p');
+          empty.style.color = 'var(--color-text-tertiary)';
+          empty.style.textAlign = 'center';
+          empty.style.padding = 'var(--space-2xl)';
+          empty.textContent = '还没有已掌握的知识点，开始学习吧！';
+          listEl.appendChild(empty);
+        } else {
+          progress.masteredRoots.forEach(id => {
+            const root = WordRoots.find(r => r.id === id);
+            if (!root) return;
+            const item = document.createElement('div');
+            item.className = 'mastered-item';
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'mastered-item-name';
+            nameSpan.textContent = root.root;
+            const unmasterBtn = document.createElement('button');
+            unmasterBtn.className = 'btn-unmaster';
+            unmasterBtn.textContent = '取消掌握';
+            unmasterBtn.addEventListener('click', function() {
+              StorageManager.unmarkRoot(root.id);
+              showFeedback('已取消掌握', false);
+              setTimeout(() => location.reload(), 500);
+            });
+            item.appendChild(nameSpan);
+            item.appendChild(unmasterBtn);
+            listEl.appendChild(item);
+          });
+        }
+      }
+
+      // Reset
+      document.getElementById('resetBtn')?.addEventListener('click', function() {
+        if (confirm('确定要重置所有学习进度吗？此操作无法撤销。')) {
+          StorageManager.resetProgress();
+          showFeedback('进度已重置', false);
+          setTimeout(() => location.reload(), 500);
+        }
+      });
+
+      function showFeedback(message, isSuccess) {
+        const toast = document.createElement('div');
+        toast.className = 'feedback-toast ' + (isSuccess ? 'success' : 'error');
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+      }
+    })();
+  </script>
+</body>
+</html>

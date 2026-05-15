@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Next.js 前端工程师知识工坊</title>
+  <meta name="description" content="涵盖 Next.js App Router 路由系统、渲染架构、数据获取、性能优化、部署运维等核心领域。通过闪卡复习、渐进学习、测试检验三种模式，帮助前端工程师系统掌握 Next.js 全栈开发能力。">
+  <meta name="keywords" content="Next.js,前端工程师,学习,知识,知识点,React,全栈">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="">
+  <meta property="og:title" content="Next.js 前端工程师知识工坊">
+  <meta property="og:description" content="从 App Router 到部署上线，系统掌握 Next.js 前端工程核心能力">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="/icon-512.png">
+  <meta property="og:site_name" content="Next.js 前端工程师知识工坊">
+  <meta property="og:locale" content="zh_CN">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Next.js 前端工程师知识工坊">
+  <meta name="twitter:description" content="从 App Router 到部署上线，系统掌握 Next.js 前端工程核心能力">
+  <meta name="twitter:image" content="/icon-512.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0070F3">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Next.js工坊">
+  <link rel="apple-touch-icon" href="/icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minimal.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-container">
+      <a href="/" class="nav-brand">⚡ Next.js 16 知识工坊</a>
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link active">首页</a></li>
+        <li><a href="learn.html" class="nav-link">学习</a></li>
+        <li><a href="flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="roots.html" class="nav-link">索引</a></li>
+        <li><a href="progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <h1 class="hero-title" id="heroTitle"></h1>
+      <p class="hero-subtitle" id="heroSubtitle"></p>
+      <div class="hero-cta">
+        <a href="learn.html" class="btn btn-primary btn-large" id="ctaPrimary"></a>
+        <a href="flashcard.html" class="btn btn-secondary btn-large" id="ctaSecondary"></a>
+      </div>
+      <div class="hero-demo" id="heroDemo">
+        <div>
+          <div class="demo-word" id="demoWord"></div>
+          <div class="demo-meaning" id="demoMeaning"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stat-grid" id="statGrid"></section>
+
+    <section class="footer-section">
+      <p class="footer-tagline" id="footerTagline"></p>
+      <p class="footer-description" id="footerDescription"></p>
+    </section>
+  </main>
+
+  <script src="js/siteConfig.js"></script>
+  <script src="js/wordData.js"></script>
+  <script>
+    (function() {
+      // Render hero title
+      const heroTitle = document.getElementById('heroTitle');
+      if (heroTitle) {
+        heroTitle.innerHTML = siteConfig.hero.title.map((line, i) =>
+          i === 1 ? `<span class="accent">${line}</span>` : line
+        ).join('<br>');
+      }
+
+      // Render subtitle
+      const heroSubtitle = document.getElementById('heroSubtitle');
+      if (heroSubtitle) heroSubtitle.textContent = siteConfig.hero.subtitle;
+
+      // Render CTAs
+      const ctaPrimary = document.getElementById('ctaPrimary');
+      if (ctaPrimary) ctaPrimary.textContent = siteConfig.cta.primary;
+      const ctaSecondary = document.getElementById('ctaSecondary');
+      if (ctaSecondary) ctaSecondary.textContent = siteConfig.cta.secondary;
+
+      // Render stats
+      const statGrid = document.getElementById('statGrid');
+      if (statGrid) {
+        siteConfig.stats.forEach(stat => {
+          const card = document.createElement('div');
+          card.className = 'stat-card';
+          const valueDiv = document.createElement('div');
+          valueDiv.className = 'stat-value';
+          valueDiv.textContent = stat.value;
+          const labelDiv = document.createElement('div');
+          labelDiv.className = 'stat-label';
+          labelDiv.textContent = stat.label;
+          card.appendChild(valueDiv);
+          card.appendChild(labelDiv);
+          statGrid.appendChild(card);
+        });
+      }
+
+      // Render footer
+      const footerTagline = document.getElementById('footerTagline');
+      if (footerTagline) footerTagline.textContent = siteConfig.footer.tagline;
+      const footerDescription = document.getElementById('footerDescription');
+      if (footerDescription) footerDescription.textContent = siteConfig.footer.description;
+
+      // Animation demo
+      if (siteConfig.hero.animation.enabled && WordRoots && WordRoots.length > 0) {
+        const demoWord = document.getElementById('demoWord');
+        const demoMeaning = document.getElementById('demoMeaning');
+        const examples = WordRoots.slice(0, siteConfig.hero.animation.demoCount);
+        let currentIndex = 0;
+
+        function updateDemo() {
+          const root = examples[currentIndex];
+          if (demoWord) demoWord.textContent = root.root;
+          if (demoMeaning) demoMeaning.textContent = root.meaning;
+          currentIndex = (currentIndex + 1) % examples.length;
+        }
+
+        updateDemo();
+        setInterval(updateDemo, 4000);
+      }
+    })();
+  </script>
+</body>
+</html>
