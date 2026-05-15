@@ -1,0 +1,21 @@
+.github/workflows/deploy.yml
+  s_c906e6f4d7be54::t_5532ae94987e9d 1-30
+index.html
+  s_c906e6f4d7be54::t_7d161c127a1a96 1-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "eda61fed6f5d4fa607aa0bbdb459b7397b355fff",
+  "prompts": {},
+  "sessions": {
+    "s_c906e6f4d7be54": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "218c2c21-66b8-4aab-8335-313fd94b163c",
+        "model": "glm-5.1"
+      },
+      "human_author": "lambert.li <lambert.li@jtexpress.com>"
+    }
+  }
+}

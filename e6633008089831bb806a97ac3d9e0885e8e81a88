@@ -1,0 +1,77 @@
+nextjs-workshop/index.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-139
+tailwindcss4-workshop/learn.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-241
+nextjs-workshop/js/wordData.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-512
+tailwindcss4-workshop/robots.txt
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-3
+tailwindcss4-workshop/js/siteConfig.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-40
+tailwindcss4-workshop/manifest.json
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-21
+tailwindcss4-workshop/sitemap.xml
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-33
+nextjs-workshop/manifest.json
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-23
+tailwindcss4-workshop/js/wordData.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-162
+tailwindcss4-workshop/progress.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-150
+nextjs-workshop/roots.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-136
+nextjs-workshop/flashcard.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-130
+nextjs-workshop/root-detail.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-144
+.gitignore
+  s_c906e6f4d7be54::t_12a241e6b26fc4 1-5
+nextjs-workshop/css/minimal.css
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-806
+nextjs-workshop/progress.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-134
+nextjs-workshop/learn.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-169
+README.md
+  s_c906e6f4d7be54::t_d7409c7fa42765 1-8
+tailwindcss4-workshop/css/minimal.css
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-603
+tailwindcss4-workshop/js/storage.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-152
+tailwindcss4-workshop/sw.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-67
+nextjs-workshop/js/storage.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-88
+tailwindcss4-workshop/index.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-126
+nextjs-workshop/js/siteConfig.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-35
+tailwindcss4-workshop/vercel.json
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-8
+nextjs-workshop/sw.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-53
+tailwindcss4-workshop/flashcard.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-198
+nextjs-workshop/validate.js
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-34
+tailwindcss4-workshop/roots.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-186
+tailwindcss4-workshop/root-detail.html
+  s_c906e6f4d7be54::t_8e5488e89f1cbc 1-220
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.8",
+  "base_commit_sha": "e6633008089831bb806a97ac3d9e0885e8e81a88",
+  "prompts": {},
+  "sessions": {
+    "s_c906e6f4d7be54": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "218c2c21-66b8-4aab-8335-313fd94b163c",
+        "model": "glm-5.1"
+      },
+      "human_author": "lambert.li <lambert.li@jtexpress.com>"
+    }
+  }
+}
