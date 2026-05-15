@@ -515,6 +515,8 @@
     // 筛选功能
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        const filter = btn.getAttribute('data-filter');
+        
         // 切换选中状态
         document.querySelectorAll('.filter-btn').forEach(b => {
           b.classList.remove('bg-primary/10', 'text-primary');
@@ -522,6 +524,36 @@
         });
         btn.classList.remove('bg-gray-100', 'text-gray-700');
         btn.classList.add('bg-primary/10', 'text-primary');
+        
+        // 筛选菜谱
+        const recipeCards = document.querySelectorAll('.card-hover');
+        recipeCards.forEach(card => {
+          if (filter === 'all') {
+            card.style.display = 'block';
+          } else {
+            const tags = Array.from(card.querySelectorAll('.text-xs')).map(tag => tag.textContent.trim());
+            let match = false;
+            // 根据筛选条件匹配
+            if (filter === 'easy') {
+              match = tags.includes('零失败');
+            } else if (filter === 'fast') {
+              const timeText = card.querySelector('.gap-3').textContent;
+              const time = parseInt(timeText.match(/(\d+)分钟/)[1]);
+              match = time <= 15;
+            } else if (filter === 'hard') {
+              match = tags.includes('硬菜');
+            } else if (filter === 'cold') {
+              match = tags.includes('凉菜');
+            } else if (filter === 'soup') {
+              match = tags.includes('汤羹');
+            } else if (filter === 'lowfat') {
+              match = tags.includes('减脂餐');
+            } else if (filter === 'kids') {
+              match = tags.includes('小朋友爱吃');
+            }
+            card.style.display = match ? 'block' : 'none';
+          }
+        });
       });
     });
   </script>
