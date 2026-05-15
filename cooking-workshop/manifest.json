@@ -1,11 +1,11 @@
 {
-  "name": "TailwindCSS v4学习工坊",
-  "short_name": "Tailwind学习",
-  "description": "系统学习TailwindCSS v4的核心特性和最佳实践",
+  "name": "家常菜学习工坊",
+  "short_name": "学做菜",
+  "description": "从零开始学做菜，轻松掌握家常菜做法和烹饪技巧",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#F9FAFB",
-  "theme_color": "#FBBF24",
+  "background_color": "#FFF7ED",
+  "theme_color": "#FF7D00",
   "icons": [
     {
       "src": "./icon-192.png",
