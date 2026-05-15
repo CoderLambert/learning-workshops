@@ -64,6 +64,14 @@
       <p class="text-gray-600 max-w-2xl mx-auto">20道精选家常菜，每道菜都有精确用料表、步骤详解、新手避坑指南，零基础也能一次成功，轻松变大厨</p>
     </div>
 
+    <!-- 搜索框 -->
+    <div class="max-w-md mx-auto mb-8">
+      <div class="relative">
+        <input type="text" id="search-input" placeholder="🔍 搜索菜谱名称，比如：番茄炒蛋" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+        <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+      </div>
+    </div>
+
     <!-- 筛选栏 -->
     <div class="flex flex-wrap gap-2 justify-center mb-8">
       <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-filter="all">全部</button>
@@ -513,9 +521,33 @@
   <!-- 脚本 -->
   <script src="./js/recipesData.js"></script>
   <script>
+    // 搜索功能
+    const searchInput = document.getElementById('search-input');
+    searchInput.addEventListener('input', (e) => {
+      const keyword = e.target.value.trim().toLowerCase();
+      const recipeCards = document.querySelectorAll('.card-hover');
+      recipeCards.forEach(card => {
+        const recipeName = card.querySelector('h3').textContent.toLowerCase();
+        if (keyword === '' || recipeName.includes(keyword)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+      // 搜索的时候重置筛选按钮选中状态
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('bg-primary/10', 'text-primary');
+        b.classList.add('bg-gray-100', 'text-gray-700');
+      });
+      document.querySelector('[data-filter="all"]').classList.remove('bg-gray-100', 'text-gray-700');
+      document.querySelector('[data-filter="all"]').classList.add('bg-primary/10', 'text-primary');
+    });
+
     // 筛选功能
     document.querySelectorAll('.filter-btn').forEach(btn => {
       btn.addEventListener('click', () => {
+        // 点击筛选的时候清空搜索框
+        searchInput.value = '';
         const filter = btn.getAttribute('data-filter');
         
         // 切换选中状态
