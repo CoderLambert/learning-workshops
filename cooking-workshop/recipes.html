@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>菜谱大全 - 家常菜学习工坊</title>
+
+  <!-- SEO 基础 -->
+  <meta name="description" content="超详细家常菜菜谱大全，每道菜都有精确用料、步骤详解、新手避坑指南，零基础也能一次成功">
+  <meta name="keywords" content="家常菜,菜谱,家常菜谱,做菜教程,新手学做菜">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://CoderLambert.github.io/learning-workshops/cooking-workshop/recipes.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="菜谱大全 - 家常菜学习工坊">
+  <meta property="og:description" content="超详细家常菜菜谱大全，每道菜都有精确用料、步骤详解、新手避坑指南，零基础也能一次成功">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://CoderLambert.github.io/learning-workshops/cooking-workshop/recipes.html">
+  <meta property="og:image" content="https://CoderLambert.github.io/learning-workshops/cooking-workshop/icon-512.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍳</text></svg>">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FF7D00">
+
+  <!-- iOS Safari PWA 支持 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="家常菜学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="./index.html" class="nav-logo">🍳 家常菜学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+        <li><a href="./recipes.html" class="nav-link" style="color: var(--primary);">菜谱大全</a></li>
+      </ul>
+    </nav>
+
+    <!-- 页面标题 -->
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-bold mb-3">🍳 家常菜谱大全</h1>
+      <p class="text-gray-600 max-w-2xl mx-auto">每道菜都有精确用料表、步骤详解、新手避坑指南，零基础也能一次成功，轻松变大厨</p>
+    </div>
+
+    <!-- 筛选栏 -->
+    <div class="flex flex-wrap gap-2 justify-center mb-8">
+      <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-filter="all">全部</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="easy">⭐️ 零失败</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="fast">⏰ 15分钟快手</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="hard">🍲 硬菜硬菜</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="cold">🥗 凉菜</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="soup">🥣 汤羹</button>
+    </div>
+
+    <!-- 菜谱列表 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 番茄炒蛋 -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 card-hover">
+        <div class="text-4xl mb-4">🍅</div>
+        <h3 class="text-xl font-bold mb-2">番茄炒蛋</h3>
+        <div class="flex gap-3 text-sm text-gray-600 mb-3">
+          <span>⭐️ 难度：简单</span>
+          <span>⏰ 耗时：10分钟</span>
+          <span>👨‍👩‍👧 2人份</span>
+        </div>
+        <p class="text-gray-600 mb-4">国民级家常菜，酸甜开胃，超级下饭，零失败率，新手必学第一道菜</p>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">零失败</span>
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">快手菜</span>
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">下饭菜</span>
+        </div>
+        <a href="./recipe-detail.html?id=1" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+          查看菜谱
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 酸辣土豆丝 -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 card-hover">
+        <div class="text-4xl mb-4">🥔</div>
+        <h3 class="text-xl font-bold mb-2">酸辣土豆丝</h3>
+        <div class="flex gap-3 text-sm text-gray-600 mb-3">
+          <span>⭐️ 难度：简单</span>
+          <span>⏰ 耗时：10分钟</span>
+          <span>👨‍👩‍👧 2人份</span>
+        </div>
+        <p class="text-gray-600 mb-4">酸辣开胃，超级下饭的快手素菜，成本不到5块钱，几分钟就能做好</p>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">零失败</span>
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">快手菜</span>
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">素菜</span>
+        </div>
+        <a href="./recipe-detail.html?id=2" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+          查看菜谱
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 可乐鸡翅 -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 card-hover">
+        <div class="text-4xl mb-4">🍗</div>
+        <h3 class="text-xl font-bold mb-2">可乐鸡翅</h3>
+        <div class="flex gap-3 text-sm text-gray-600 mb-3">
+          <span>⭐️⭐️ 难度：中等</span>
+          <span>⏰ 耗时：20分钟</span>
+          <span>👨‍👩‍👧 2-3人份</span>
+        </div>
+        <p class="text-gray-600 mb-4">小朋友超爱的甜咸口鸡翅，做法简单零失败，招待朋友也很有面</p>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">零失败</span>
+          <span class="px-2 py-0.5 bg-orange-50 text-orange-700 text-xs rounded-full">荤菜</span>
+          <span class="px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded-full">小朋友爱吃</span>
+        </div>
+        <a href="./recipe-detail.html?id=3" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+          查看菜谱
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 红烧肉 -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 card-hover">
+        <div class="text-4xl mb-4">🥩</div>
+        <h3 class="text-xl font-bold mb-2">红烧肉</h3>
+        <div class="flex gap-3 text-sm text-gray-600 mb-3">
+          <span>⭐️⭐️⭐️ 难度：中等</span>
+          <span>⏰ 耗时：1小时</span>
+          <span>👨‍👩‍👧 3-4人份</span>
+        </div>
+        <p class="text-gray-600 mb-4">硬菜界扛把子，肥而不腻，入口即化，家宴待客的绝对硬菜</p>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <span class="px-2 py-0.5 bg-red-50 text-red-700 text-xs rounded-full">硬菜</span>
+          <span class="px-2 py-0.5 bg-orange-50 text-orange-700 text-xs rounded-full">荤菜</span>
+          <span class="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs rounded-full">家宴必备</span>
+        </div>
+        <a href="./recipe-detail.html?id=4" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+          查看菜谱
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 麻婆豆腐 -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 card-hover">
+        <div class="text-4xl mb-4">🍮</div>
+        <h3 class="text-xl font-bold mb-2">麻婆豆腐</h3>
+        <div class="flex gap-3 text-sm text-gray-600 mb-3">
+          <span>⭐️⭐️ 难度：简单</span>
+          <span>⏰ 耗时：10分钟</span>
+          <span>👨‍👩‍👧 2人份</span>
+        </div>
+        <p class="text-gray-600 mb-4">麻辣鲜香，超级下饭的经典川菜，豆腐嫩滑入味，成本低做法快</p>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">快手菜</span>
+          <span class="px-2 py-0.5 bg-orange-50 text-orange-700 text-xs rounded-full">川菜</span>
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">下饭菜</span>
+        </div>
+        <a href="./recipe-detail.html?id=5" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+          查看菜谱
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 青椒肉丝 -->
+      <div class="bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 card-hover">
+        <div class="text-4xl mb-4">🌶️</div>
+        <h3 class="text-xl font-bold mb-2">青椒肉丝</h3>
+        <div class="flex gap-3 text-sm text-gray-600 mb-3">
+          <span>⭐️⭐️ 难度：简单</span>
+          <span>⏰ 耗时：15分钟</span>
+          <span>👨‍👩‍👧 2人份</span>
+        </div>
+        <p class="text-gray-600 mb-4">经典家常下饭菜，肉丝嫩滑，青椒脆爽，配米饭能多吃两碗</p>
+        <div class="flex gap-2 mb-4 flex-wrap">
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">快手菜</span>
+          <span class="px-2 py-0.5 bg-orange-50 text-orange-700 text-xs rounded-full">荤素搭配</span>
+          <span class="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full">下饭菜</span>
+        </div>
+        <a href="./recipe-detail.html?id=6" class="inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
+          查看菜谱
+          <i class="fa fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-tagline">新手也能轻松变大厨</div>
+      <p class="footer-description">
+        本网站收集整理了各种实用的家常菜做法和烹饪技巧，内容持续更新，希望帮助更多人学会做菜，享受做饭的乐趣。
+      </p>
+      <p>© 2026 家常菜学习工坊</p>
+    </footer>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    // 筛选功能
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // 切换选中状态
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-primary/10', 'text-primary');
+          b.classList.add('bg-gray-100', 'text-gray-700');
+        });
+        btn.classList.remove('bg-gray-100', 'text-gray-700');
+        btn.classList.add('bg-primary/10', 'text-primary');
+      });
+    });
+  </script>
+</body>
+</html>

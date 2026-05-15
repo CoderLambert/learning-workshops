@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">菜谱详情 - 家常菜学习工坊</title>
+
+  <!-- SEO 基础 -->
+  <meta name="description" content="超详细家常菜菜谱，精确用料、步骤详解、新手避坑指南，零基础也能一次成功">
+  <meta name="keywords" content="家常菜,菜谱,家常菜谱,做菜教程">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://CoderLambert.github.io/learning-workshops/cooking-workshop/recipe-detail.html">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="菜谱详情 - 家常菜学习工坊">
+  <meta property="og:description" content="超详细家常菜菜谱，精确用料、步骤详解、新手避坑指南，零基础也能一次成功">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://CoderLambert.github.io/learning-workshops/cooking-workshop/recipe-detail.html">
+  <meta property="og:image" content="https://CoderLambert.github.io/learning-workshops/cooking-workshop/icon-512.png">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍳</text></svg>">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#FF7D00">
+
+  <!-- iOS Safari PWA 支持 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="家常菜学习">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="./css/minimal.css">
+  <style>
+    .ingredients-box {
+      background: #FFF7ED;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .step-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+    .tips-box {
+      background: #FEF3C7;
+      border-left: 4px solid #F59E0B;
+      padding: 16px 20px;
+      border-radius: 8px;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="./index.html" class="nav-logo">🍳 家常菜学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+        <li><a href="./recipes.html" class="nav-link" style="color: var(--primary);">菜谱大全</a></li>
+      </ul>
+    </nav>
+
+    <!-- 菜谱详情 -->
+    <div class="card p-8 max-w-4xl mx-auto" id="recipeContainer">
+      <div class="text-center mb-8 loading">
+        <p>加载中...</p>
+      </div>
+    </div>
+
+    <!-- 底部操作 -->
+    <div class="flex justify-center gap-4 mt-8">
+      <a href="./recipes.html" class="btn btn-secondary">← 返回菜谱列表</a>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer mt-10">
+      <div class="footer-tagline">新手也能轻松变大厨</div>
+      <p class="footer-description">
+        本网站收集整理了各种实用的家常菜做法和烹饪技巧，内容持续更新，希望帮助更多人学会做菜，享受做饭的乐趣。
+      </p>
+      <p>© 2026 家常菜学习工坊</p>
+    </footer>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="./js/recipesData.js"></script>
+  <script>
+    // 获取url参数中的菜谱id
+    function getQueryParam(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    // 加载菜谱详情
+    function loadRecipe() {
+      const recipeId = parseInt(getQueryParam('id'));
+      const recipe = recipesData.find(r => r.id === recipeId);
+      
+      if (!recipe) {
+        document.getElementById('recipeContainer').innerHTML = `
+          <div class="text-center py-10">
+            <p class="text-xl text-gray-600">😢 菜谱不存在哦</p>
+            <a href="./recipes.html" class="btn btn-primary mt-4">返回菜谱列表</a>
+          </div>
+        `;
+        return;
+      }
+
+      // 更新页面标题
+      document.getElementById('pageTitle').textContent = `${recipe.name} - 家常菜学习工坊`;
+
+      // 渲染菜谱内容
+      let html = `
+        <div class="text-center mb-8">
+          <div class="text-6xl mb-4">${recipe.icon}</div>
+          <h1 class="text-3xl font-bold mb-3">${recipe.name}</h1>
+          <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-600 mb-4">
+            <span class="flex items-center gap-1"><i class="fa fa-star text-yellow-500"></i> 难度：${recipe.difficulty}</span>
+            <span class="flex items-center gap-1"><i class="fa fa-clock text-blue-500"></i> 耗时：${recipe.time}</span>
+            <span class="flex items-center gap-1"><i class="fa fa-users text-green-500"></i> 份量：${recipe.serving}</span>
+          </div>
+          <div class="flex flex-wrap gap-2 justify-center mb-0">
+            ${recipe.tags.map(tag => `<span class="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full">${tag}</span>`).join('')}
+          </div>
+        </div>
+
+        <div class="ingredients-box">
+          <h2 class="text-xl font-bold mb-4">📝 用料</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <h3 class="font-semibold mb-2 text-gray-800">主料</h3>
+              <ul class="space-y-2">
+                ${recipe.ingredients.main.map(item => `<li class="flex justify-between"><span>${item.name}</span><span class="text-gray-600">${item.amount}</span></li>`).join('')}
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-semibold mb-2 text-gray-800">调料</h3>
+              <ul class="space-y-2">
+                ${recipe.ingredients.seasoning.map(item => `<li class="flex justify-between"><span>${item.name}</span><span class="text-gray-600">${item.amount}</span></li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-8">
+          <h2 class="text-xl font-bold mb-4">👩‍🍳 制作步骤</h2>
+          <div class="space-y-3">
+            ${recipe.steps.map((step, index) => `
+              <div class="step-item">
+                <div class="step-number">${index + 1}</div>
+                <div class="flex-1">${step}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="tips-box">
+          <h3 class="font-bold mb-2">💡 新手小贴士</h3>
+          <ul class="space-y-2 text-gray-700">
+            ${recipe.tips.map(tip => `<li>${tip}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      document.getElementById('recipeContainer').innerHTML = html;
+    }
+
+    // 页面加载完成后加载菜谱
+    document.addEventListener('DOMContentLoaded', loadRecipe);
+  </script>
+</body>
+</html>
