@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">菜谱详情 - 家常菜学习工坊</title>
+  <title>菜谱详情 - 家常菜学习工坊</title>
 
   <!-- SEO 基础 -->
   <meta name="description" content="超详细家常菜菜谱，精确用料、步骤详解、新手避坑指南，零基础也能一次成功">
-  <meta name="keywords" content="家常菜,菜谱,家常菜谱,做菜教程">
+  <meta name="keywords" content="家常菜,菜谱,家常菜谱,做菜教程,新手学做菜">
   <meta name="author" content="小秘书">
   <meta name="language" content="zh-CN">
   <meta name="robots" content="index, follow">
@@ -44,37 +44,41 @@
   <!-- 样式 -->
   <link rel="stylesheet" href="./css/minimal.css">
   <style>
-    .ingredients-box {
-      background: #FFF7ED;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
+    .recipe-step {
+      counter-increment: step;
+      position: relative;
+      padding-left: 50px;
     }
-    .step-item {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    .step-number {
+    .recipe-step::before {
+      content: counter(step);
+      position: absolute;
+      left: 0;
+      top: 0;
       width: 32px;
       height: 32px;
-      border-radius: 50%;
-      background: var(--primary);
+      background-color: var(--primary);
       color: white;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
-      font-weight: bold;
+      font-weight: 600;
+      font-size: 14px;
     }
-    .tips-box {
-      background: #FEF3C7;
-      border-left: 4px solid #F59E0B;
-      padding: 16px 20px;
+    .ingredient-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .ingredient-item:last-child {
+      border-bottom: none;
+    }
+    .tip-card {
+      background-color: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      padding: 16px;
       border-radius: 8px;
-      margin-top: 24px;
     }
   </style>
 </head>
@@ -93,15 +97,12 @@
     </nav>
 
     <!-- 菜谱详情 -->
-    <div class="card p-8 max-w-4xl mx-auto" id="recipeContainer">
-      <div class="text-center mb-8 loading">
-        <p>加载中...</p>
+    <div id="recipe-detail" class="max-w-3xl mx-auto">
+      <!-- 加载状态 -->
+      <div class="text-center py-20">
+        <i class="fa fa-spinner fa-spin text-3xl text-primary mb-4"></i>
+        <p class="text-gray-600">正在加载菜谱详情...</p>
       </div>
-    </div>
-
-    <!-- 底部操作 -->
-    <div class="flex justify-center gap-4 mt-8">
-      <a href="./recipes.html" class="btn btn-secondary">← 返回菜谱列表</a>
     </div>
 
     <!-- 页脚 -->
@@ -117,88 +118,170 @@
   <!-- 脚本 -->
   <script src="./js/recipesData.js"></script>
   <script>
-    // 获取url参数中的菜谱id
-    function getQueryParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name);
-    }
+    // 从URL获取菜谱ID
+    const urlParams = new URLSearchParams(window.location.search);
+    const recipeId = parseInt(urlParams.get('id'));
 
-    // 加载菜谱详情
-    function loadRecipe() {
-      const recipeId = parseInt(getQueryParam('id'));
-      const recipe = recipesData.find(r => r.id === recipeId);
-      
-      if (!recipe) {
-        document.getElementById('recipeContainer').innerHTML = `
-          <div class="text-center py-10">
-            <p class="text-xl text-gray-600">😢 菜谱不存在哦</p>
-            <a href="./recipes.html" class="btn btn-primary mt-4">返回菜谱列表</a>
-          </div>
-        `;
-        return;
-      }
+    // 找到对应的菜谱
+    const recipe = window.recipesData.find(r => r.id === recipeId);
 
-      // 更新页面标题
-      document.getElementById('pageTitle').textContent = `${recipe.name} - 家常菜学习工坊`;
+    if (recipe) {
+      // 渲染菜谱详情
+      const detailHtml = `
+        <!-- 返回按钮 -->
+        <div class="mb-6">
+          <a href="./recipes.html" class="inline-flex items-center gap-2 text-gray-600 hover:text-primary transition-colors">
+            <i class="fa fa-arrow-left"></i>
+            返回菜谱列表
+          </a>
+        </div>
 
-      // 渲染菜谱内容
-      let html = `
+        <!-- 菜谱头部 -->
         <div class="text-center mb-8">
           <div class="text-6xl mb-4">${recipe.icon}</div>
           <h1 class="text-3xl font-bold mb-3">${recipe.name}</h1>
-          <div class="flex flex-wrap justify-center gap-6 text-sm text-gray-600 mb-4">
+          <div class="flex flex-wrap justify-center gap-4 text-sm text-gray-600 mb-4">
             <span class="flex items-center gap-1"><i class="fa fa-star text-yellow-500"></i> 难度：${recipe.difficulty}</span>
-            <span class="flex items-center gap-1"><i class="fa fa-clock text-blue-500"></i> 耗时：${recipe.time}</span>
+            <span class="flex items-center gap-1"><i class="fa fa-clock-o text-blue-500"></i> 耗时：${recipe.time}</span>
             <span class="flex items-center gap-1"><i class="fa fa-users text-green-500"></i> 份量：${recipe.serving}</span>
           </div>
-          <div class="flex flex-wrap gap-2 justify-center mb-0">
-            ${recipe.tags.map(tag => `<span class="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full">${tag}</span>`).join('')}
+          <div class="flex flex-wrap justify-center gap-2 mb-4">
+            ${recipe.tags.map(tag => `<span class="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">${tag}</span>`).join('')}
           </div>
         </div>
 
-        <div class="ingredients-box">
-          <h2 class="text-xl font-bold mb-4">📝 用料</h2>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- 用料部分 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i class="fa fa-shopping-basket text-primary"></i>
+            用料表
+          </h2>
+          
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">主料</h3>
             <div>
-              <h3 class="font-semibold mb-2 text-gray-800">主料</h3>
-              <ul class="space-y-2">
-                ${recipe.ingredients.main.map(item => `<li class="flex justify-between"><span>${item.name}</span><span class="text-gray-600">${item.amount}</span></li>`).join('')}
-              </ul>
+              ${recipe.ingredients.main.map(item => `
+                <div class="ingredient-item">
+                  <span>${item.name}</span>
+                  <span class="text-gray-600 font-medium">${item.amount}</span>
+                </div>
+              `).join('')}
             </div>
+          </div>
+
+          <div>
+            <h3 class="text-lg font-semibold mb-3 text-gray-700">调料</h3>
             <div>
-              <h3 class="font-semibold mb-2 text-gray-800">调料</h3>
-              <ul class="space-y-2">
-                ${recipe.ingredients.seasoning.map(item => `<li class="flex justify-between"><span>${item.name}</span><span class="text-gray-600">${item.amount}</span></li>`).join('')}
-              </ul>
+              ${recipe.ingredients.seasoning.map(item => `
+                <div class="ingredient-item">
+                  <span>${item.name}</span>
+                  <span class="text-gray-600 font-medium">${item.amount}</span>
+                </div>
+              `).join('')}
             </div>
           </div>
         </div>
 
-        <div class="mb-8">
-          <h2 class="text-xl font-bold mb-4">👩‍🍳 制作步骤</h2>
-          <div class="space-y-3">
+        <!-- 步骤部分 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+          <h2 class="text-xl font-bold mb-4 flex items-center gap-2">
+            <i class="fa fa-list-ol text-primary"></i>
+            做法步骤
+          </h2>
+          <div class="space-y-6">
             ${recipe.steps.map((step, index) => `
-              <div class="step-item">
-                <div class="step-number">${index + 1}</div>
-                <div class="flex-1">${step}</div>
+              <div class="recipe-step">
+                <p class="text-gray-800 leading-relaxed">${step}</p>
               </div>
             `).join('')}
           </div>
         </div>
 
-        <div class="tips-box">
-          <h3 class="font-bold mb-2">💡 新手小贴士</h3>
-          <ul class="space-y-2 text-gray-700">
-            ${recipe.tips.map(tip => `<li>${tip}</li>`).join('')}
+        <!-- 小贴士部分 -->
+        <div class="tip-card mb-8">
+          <h2 class="text-xl font-bold mb-3 flex items-center gap-2">
+            <i class="fa fa-lightbulb-o text-yellow-600"></i>
+            💡 新手小贴士
+          </h2>
+          <ul class="space-y-2">
+            ${recipe.tips.map(tip => `
+              <li class="text-gray-800 leading-relaxed">${tip}</li>
+            `).join('')}
           </ul>
+        </div>
+
+        <!-- 底部操作 -->
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button id="share-btn" class="btn btn-primary flex items-center gap-2">
+            <i class="fa fa-share-alt"></i>
+            分享菜谱
+          </button>
+          <button id="collect-btn" class="btn btn-outline flex items-center gap-2">
+            <i class="fa fa-star-o"></i>
+            收藏菜谱
+          </button>
         </div>
       `;
 
-      document.getElementById('recipeContainer').innerHTML = html;
-    }
+      document.getElementById('recipe-detail').innerHTML = detailHtml;
 
-    // 页面加载完成后加载菜谱
-    document.addEventListener('DOMContentLoaded', loadRecipe);
+      // 动态修改页面标题
+      document.title = `${recipe.name} - 家常菜学习工坊`;
+
+      // 分享功能
+      document.getElementById('share-btn').addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: `${recipe.name} 做法`,
+            text: `我发现了一个超详细的${recipe.name}菜谱，零基础也能一次成功！`,
+            url: window.location.href
+          });
+        } else {
+          // 复制链接到剪贴板
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            alert('菜谱链接已经复制到剪贴板，赶紧分享给朋友吧~');
+          });
+        }
+      });
+
+      // 收藏功能
+      const collectBtn = document.getElementById('collect-btn');
+      const collectedRecipes = JSON.parse(localStorage.getItem('ck_collection') || '[]');
+      const isCollected = collectedRecipes.includes(recipeId);
+
+      if (isCollected) {
+        collectBtn.innerHTML = '<i class="fa fa-star text-yellow-500"></i> 已收藏';
+        collectBtn.classList.add('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
+      }
+
+      collectBtn.addEventListener('click', () => {
+        let collected = JSON.parse(localStorage.getItem('ck_collection') || '[]');
+        if (collected.includes(recipeId)) {
+          // 取消收藏
+          collected = collected.filter(id => id !== recipeId);
+          collectBtn.innerHTML = '<i class="fa fa-star-o"></i> 收藏菜谱';
+          collectBtn.classList.remove('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
+          alert('已取消收藏');
+        } else {
+          // 添加收藏
+          collected.push(recipeId);
+          collectBtn.innerHTML = '<i class="fa fa-star text-yellow-500"></i> 已收藏';
+          collectBtn.classList.add('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
+          alert('收藏成功，可以在我的收藏里查看哦~');
+        }
+        localStorage.setItem('ck_collection', JSON.stringify(collected));
+      });
+    } else {
+      // 菜谱不存在
+      document.getElementById('recipe-detail').innerHTML = `
+        <div class="text-center py-20">
+          <div class="text-6xl mb-4">😅</div>
+          <h2 class="text-2xl font-bold mb-3">菜谱不存在</h2>
+          <p class="text-gray-600 mb-6">你要找的菜谱可能已经被删除或者链接错误</p>
+          <a href="./recipes.html" class="btn btn-primary">返回菜谱列表</a>
+        </div>
+      `;
+    }
   </script>
 </body>
 </html>
