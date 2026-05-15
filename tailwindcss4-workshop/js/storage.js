@@ -2,9 +2,9 @@
 const Storage = {
   // 存储键名
   KEYS: {
-    PROGRESS: 'tailwindcss4_workshop_progress',
-    MASTERED: 'tailwindcss4_workshop_mastered',
-    LAST_VISITED: 'tailwindcss4_workshop_last_visited'
+    PROGRESS: 'tw_workshop_progress',
+    MASTERED: 'tw_workshop_mastered',
+    LAST_VISITED: 'tw_workshop_last_visited'
   },
 
   // 初始化存储
