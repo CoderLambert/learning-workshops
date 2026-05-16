@@ -4,217 +4,137 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>知识点详情 - TypeScript 学习工坊</title>
-
-  <meta name="description" content="TypeScript知识点详细内容，包含示例代码和测试题">
-  <meta name="keywords" content="TypeScript,知识点详情,教程">
-  <meta name="author" content="小秘书">
-  <meta name="language" content="zh-CN">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://CoderLambert.github.io/learning-workshops/typescript-workshop/root-detail">
-
-  <meta property="og:title" content="知识点详情 - TypeScript 学习工坊">
-  <meta property="og:description" content="TypeScript知识点详细内容，包含示例代码和测试题">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://CoderLambert.github.io/learning-workshops/typescript-workshop/root-detail">
-  <meta property="og:image" content="https://CoderLambert.github.io/learning-workshops/typescript-workshop/icon-512.png">
-
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
-
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#3178C6">
-
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TypeScript学习">
   <link rel="apple-touch-icon" href="./icon-192.png">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/minimal.css">
 </head>
 <body>
   <div class="container">
     <nav class="nav">
-      <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="#" class="nav-logo">📘 TypeScript学习工坊</a>
+      <a href="./index.html" class="nav-logo">📘 TypeScript 学习工坊</a>
       <ul class="nav-links">
-        <li><a href="./learn" class="nav-link">开始学习</a></li>
-        <li><a href="./flashcard" class="nav-link">闪卡复习</a></li>
-        <li><a href="./roots" class="nav-link">知识点索引</a></li>
-        <li><a href="./progress" class="nav-link">学习进度</a></li>
+        <li><a href="./learn.html" class="nav-link">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link">索引</a></li>
+        <li><a href="./progress.html" class="nav-link">进度</a></li>
       </ul>
     </nav>
 
-    <div class="learn-card card" id="learn-card">
-      <div class="flex items-center justify-between mb-4">
-        <a href="./roots" class="text-primary hover:underline flex items-center gap-1">
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-          返回列表
-        </a>
-        <span id="category-tag" class="text-xs font-medium px-2 py-1 rounded-full bg-blue-100 text-blue-800"></span>
-      </div>
-
-      <div class="learn-card-title" id="card-title">加载中...</div>
-      <div class="learn-card-meta" id="card-meta"></div>
-      <div class="learn-card-description" id="card-description"></div>
-      
-      <div class="learn-card-examples" id="card-examples"></div>
-
-      <div class="quiz" id="quiz-section" style="display: none;">
-        <div class="quiz-question" id="quiz-question"></div>
-        <div class="quiz-options" id="quiz-options"></div>
-        <div id="quiz-feedback" class="quiz-feedback" style="display: none;"></div>
-      </div>
-
-      <div class="flex justify-between items-center mt-8">
-        <button id="mark-mastered-btn" class="btn btn-primary">标记为已掌握 ✓</button>
-        <a href="./learn" class="btn btn-secondary">去连续学习 →</a>
+    <div class="learn-card" id="learn-card">
+      <div id="card-header"></div>
+      <div id="card-examples"></div>
+      <div id="card-quiz"></div>
+      <div class="learn-navigation">
+        <a href="./learn.html" class="btn btn-secondary">← 返回列表</a>
+        <div class="flex gap-2">
+          <button class="btn btn-secondary" id="mark-btn" onclick="toggleLearned()">✓ 标记已学</button>
+          <a href="#" class="btn btn-primary" id="next-link">下一个 →</a>
+        </div>
       </div>
     </div>
+
+    <footer class="footer">
+      <a href="../" class="btn btn-secondary">← 返回学习工坊合集</a>
+    </footer>
   </div>
 
   <script src="./js/wordData.js"></script>
-  <script src="./js/siteConfig.js"></script>
   <script src="./js/storage.js"></script>
   <script>
-    let selectedOption = null
-    let answered = false
-    let currentItem = null
+    const params = new URLSearchParams(window.location.search);
+    const wordId = parseInt(params.get('id'));
+    const word = WordRoots.find(w => w.id === wordId);
 
-    // 获取URL参数
-    function getQueryParam(name) {
-      const urlParams = new URLSearchParams(window.location.search)
-      return urlParams.get(name)
-    }
+    if (!word) {
+      document.getElementById('learn-card').innerHTML = '<p class="text-center text-gray-500 mt-8">知识点未找到</p><div class="text-center"><a href="./learn.html" class="btn btn-primary">返回列表</a></div>';
+    } else {
+      const isLearned = Storage.isLearned(word.id);
+      const diffColor = (word.difficulty === '基础') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
 
-    // 初始化
-    function init() {
-      const id = parseInt(getQueryParam('id'), 10)
-      if (!id) {
-        alert('参数错误，返回知识点列表')
-        window.location.href = '/roots'
-        return
-      }
-
-      currentItem = WordRoots.find(item => item.id === id)
-      if (!currentItem) {
-        alert('知识点不存在，返回知识点列表')
-        window.location.href = '/roots'
-        return
-      }
-
-      renderItem()
-    }
-
-    // 渲染内容
-    function renderItem() {
-      // 更新页面标题
-      document.title = `${currentItem.root} - TypeScript 学习工坊`
-
-      document.getElementById('category-tag').textContent = currentItem.origin
-      document.getElementById('card-title').textContent = currentItem.root
-      document.getElementById('card-meta').textContent = currentItem.meaning
-      document.getElementById('card-description').textContent = currentItem.description
-
-      // 渲染示例
-      const examplesHtml = currentItem.examples.map(example => `
-        <div class="learn-card-example">
-          <div class="example-title">${example.word}：${example.meaning}</div>
-          <div class="example-code">${escapeHtml(example.explanation)}</div>
+      document.getElementById('card-header').innerHTML = `
+        <h1 class="learn-card-title">${word.root}</h1>
+        <div class="learn-card-meta">
+          <span class="text-sm px-2 py-1 rounded-full ${diffColor}">${word.difficulty}</span>
+          <span class="text-sm px-2 py-1 rounded-full bg-blue-100 text-blue-800" style="margin-left:8px;">${word.origin}</span>
+          <span class="text-sm" style="margin-left:12px;">约 ${word.duration}</span>
+          ${isLearned ? '<span class="text-sm" style="margin-left:12px;">✅ 已学习</span>' : ''}
         </div>
-      `).join('')
-      document.getElementById('card-examples').innerHTML = examplesHtml
+        <p class="learn-card-description">${word.description}</p>
+      `;
 
-      // 渲染测试题
-      if (currentItem.quiz) {
-        renderQuiz(currentItem.quiz)
+      if (word.examples && word.examples.length > 0) {
+        const examplesHtml = word.examples.map((ex, i) => {
+          const codeText = ex.explanation || '暂无代码示例';
+          return `
+            <div class="learn-card-example">
+              <p class="example-title">示例 ${i + 1}：${ex.word}</p>
+              <pre class="example-code">${codeText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('card-examples').innerHTML = `<div class="learn-card-examples"><h2 class="text-xl font-bold mb-4">💻 代码示例</h2>${examplesHtml}</div>`;
+      }
+
+      if (word.quiz) {
+        const quiz = word.quiz;
+        const correctIdx = quiz.correctAnswer !== undefined ? quiz.correctAnswer : 0;
+        document.getElementById('card-quiz').innerHTML = `
+          <div class="quiz" id="quiz-container">
+            <p class="quiz-question">🧠 ${quiz.question}</p>
+            <div class="quiz-options" id="quiz-options">
+              ${quiz.options.map((opt, i) => `
+                <div class="quiz-option" onclick="checkAnswer(${i}, ${correctIdx})">${String.fromCharCode(65 + i)}. ${opt}</div>
+              `).join('')}
+            </div>
+            <div id="quiz-feedback"></div>
+          </div>
+        `;
+      }
+
+      document.getElementById('mark-btn').textContent = isLearned ? '✅ 已学习' : '✓ 标记已学';
+      if (isLearned) {
+        document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)';
+        document.getElementById('mark-btn').style.color = 'white';
+      }
+
+      const nextIdx = (WordRoots.findIndex(w => w.id === word.id) + 1) % WordRoots.length;
+      document.getElementById('next-link').href = `./root-detail.html?id=${WordRoots[nextIdx].id}`;
+
+      Storage.markLearned(word.id);
+      Storage.saveLastVisited(word.id);
+    }
+
+    function toggleLearned() {
+      Storage.markMastered(word.id);
+      document.getElementById('mark-btn').textContent = '✅ 已掌握';
+      document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)';
+      document.getElementById('mark-btn').style.color = 'white';
+    }
+
+    function checkAnswer(idx, correctIdx) {
+      const opts = document.querySelectorAll('.quiz-option');
+      const feedback = document.getElementById('quiz-feedback');
+      opts.forEach((o, i) => {
+        o.style.pointerEvents = 'none';
+        if (i === correctIdx) o.classList.add('correct');
+        else if (i === idx && i !== correctIdx) o.classList.add('incorrect');
+      });
+      const quiz = word.quiz;
+      if (idx === correctIdx) {
+        feedback.innerHTML = `<div class="quiz-feedback correct">✅ 正确！</div>`;
+        Storage.markMastered(word.id);
       } else {
-        document.getElementById('quiz-section').style.display = 'none'
+        feedback.innerHTML = `<div class="quiz-feedback incorrect">❌ 不对哦。正确答案是：${String.fromCharCode(65 + correctIdx)}. ${quiz.options[correctIdx]}</div>`;
       }
-
-      // 检查是否已经掌握
-      if (Storage.isMastered(currentItem.id)) {
-        document.getElementById('mark-mastered-btn').textContent = '✓ 已掌握'
-        document.getElementById('mark-mastered-btn').disabled = true
-      }
-
-      // 标记为已学习
-      Storage.markLearned(currentItem.id)
-      Storage.saveLastVisited(currentItem.id)
     }
-
-    // 渲染测试题
-    function renderQuiz(quiz) {
-      document.getElementById('quiz-section').style.display = 'block'
-      document.getElementById('quiz-question').textContent = quiz.question
-      
-      const optionsHtml = quiz.options.map((option, index) => `
-        <div class="quiz-option" data-index="${index}">${option}</div>
-      `).join('')
-      document.getElementById('quiz-options').innerHTML = optionsHtml
-
-      // 绑定选项点击事件
-      document.querySelectorAll('.quiz-option').forEach(option => {
-        option.addEventListener('click', () => {
-          if (answered) return
-          
-          // 清除之前的选中
-          document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'))
-          
-          // 选中当前
-          option.classList.add('selected')
-          selectedOption = parseInt(option.dataset.index, 10)
-          
-          // 检查答案
-          checkAnswer()
-        })
-      })
-    }
-
-    // 检查答案
-    function checkAnswer() {
-      const quiz = currentItem.quiz
-      if (selectedOption === null) return
-
-      answered = true
-      const feedbackEl = document.getElementById('quiz-feedback')
-      
-      if (selectedOption === quiz.correctAnswer) {
-        feedbackEl.textContent = '✅ 回答正确！'
-        feedbackEl.className = 'quiz-feedback correct'
-        document.querySelector(`.quiz-option[data-index="${selectedOption}"]`).classList.add('correct')
-        // 自动标记为已掌握
-        Storage.markMastered(currentItem.id)
-        document.getElementById('mark-mastered-btn').textContent = '✓ 已掌握'
-        document.getElementById('mark-mastered-btn').disabled = true
-      } else {
-        feedbackEl.textContent = '❌ 回答错误，正确答案是：' + quiz.options[quiz.correctAnswer]
-        feedbackEl.className = 'quiz-feedback incorrect'
-        document.querySelector(`.quiz-option[data-index="${selectedOption}"]`).classList.add('incorrect')
-        document.querySelector(`.quiz-option[data-index="${quiz.correctAnswer}"]`).classList.add('correct')
-      }
-
-      feedbackEl.style.display = 'block'
-    }
-
-    // 标记为已掌握
-    document.getElementById('mark-mastered-btn').addEventListener('click', () => {
-      Storage.markMastered(currentItem.id)
-      document.getElementById('mark-mastered-btn').textContent = '✓ 已掌握'
-      document.getElementById('mark-mastered-btn').disabled = true
-    })
-
-    // HTML转义
-    function escapeHtml(text) {
-      const div = document.createElement('div')
-      div.textContent = text
-      return div.innerHTML
-    }
-
-    init()
   </script>
 </body>
 </html>
