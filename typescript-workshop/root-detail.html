@@ -7,9 +7,6 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#3178C6">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="TypeScript学习">
   <link rel="apple-touch-icon" href="./icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -49,15 +46,14 @@
   <script src="./js/wordData.js"></script>
   <script src="./js/storage.js"></script>
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const wordId = parseInt(params.get('id'));
+    const wordId = parseInt(new URLSearchParams(window.location.search).get('id'));
     const word = WordRoots.find(w => w.id === wordId);
 
     if (!word) {
       document.getElementById('learn-card').innerHTML = '<p class="text-center text-gray-500 mt-8">知识点未找到</p><div class="text-center"><a href="./learn.html" class="btn btn-primary">返回列表</a></div>';
     } else {
-      const isLearned = Storage.isLearned(word.id);
-      const diffColor = (word.difficulty === '基础') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+      const isLearned = storageManager.getProgress()[word.id]?.learned;
+      const diffColor = word.difficulty === '基础' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
 
       document.getElementById('card-header').innerHTML = `
         <h1 class="learn-card-title">${word.root}</h1>
@@ -65,34 +61,29 @@
           <span class="text-sm px-2 py-1 rounded-full ${diffColor}">${word.difficulty}</span>
           <span class="text-sm px-2 py-1 rounded-full bg-blue-100 text-blue-800" style="margin-left:8px;">${word.origin}</span>
           <span class="text-sm" style="margin-left:12px;">约 ${word.duration}</span>
-          ${isLearned ? '<span class="text-sm" style="margin-left:12px;">✅ 已学习</span>' : ''}
+          ${isLearned ? '<span style="margin-left:12px;">✅</span>' : ''}
         </div>
         <p class="learn-card-description">${word.description}</p>
       `;
 
       if (word.examples && word.examples.length > 0) {
-        const examplesHtml = word.examples.map((ex, i) => {
-          const codeText = ex.explanation || '暂无代码示例';
-          return `
-            <div class="learn-card-example">
-              <p class="example-title">示例 ${i + 1}：${ex.word}</p>
-              <pre class="example-code">${codeText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
-            </div>
-          `;
-        }).join('');
-        document.getElementById('card-examples').innerHTML = `<div class="learn-card-examples"><h2 class="text-xl font-bold mb-4">💻 代码示例</h2>${examplesHtml}</div>`;
+        const html = word.examples.map((ex, i) => `
+          <div class="learn-card-example">
+            <p class="example-title">示例 ${i + 1}：${ex.word}</p>
+            <pre class="example-code">${(ex.explanation || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+          </div>
+        `).join('');
+        document.getElementById('card-examples').innerHTML = `<div class="learn-card-examples"><h2 class="text-xl font-bold mb-4">💻 代码示例</h2>${html}</div>`;
       }
 
       if (word.quiz) {
         const quiz = word.quiz;
         const correctIdx = quiz.correctAnswer !== undefined ? quiz.correctAnswer : 0;
         document.getElementById('card-quiz').innerHTML = `
-          <div class="quiz" id="quiz-container">
+          <div class="quiz">
             <p class="quiz-question">🧠 ${quiz.question}</p>
             <div class="quiz-options" id="quiz-options">
-              ${quiz.options.map((opt, i) => `
-                <div class="quiz-option" onclick="checkAnswer(${i}, ${correctIdx})">${String.fromCharCode(65 + i)}. ${opt}</div>
-              `).join('')}
+              ${quiz.options.map((opt, i) => `<div class="quiz-option" onclick="checkAnswer(${i},${correctIdx})">${String.fromCharCode(65+i)}. ${opt}</div>`).join('')}
             </div>
             <div id="quiz-feedback"></div>
           </div>
@@ -100,21 +91,18 @@
       }
 
       document.getElementById('mark-btn').textContent = isLearned ? '✅ 已学习' : '✓ 标记已学';
-      if (isLearned) {
-        document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)';
-        document.getElementById('mark-btn').style.color = 'white';
-      }
+      if (isLearned) { document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)'; }
+      document.getElementById('mark-btn').style.color = 'white';
 
       const nextIdx = (WordRoots.findIndex(w => w.id === word.id) + 1) % WordRoots.length;
       document.getElementById('next-link').href = `./root-detail.html?id=${WordRoots[nextIdx].id}`;
 
-      Storage.markLearned(word.id);
-      Storage.saveLastVisited(word.id);
+      storageManager.markLearned(word.id);
     }
 
     function toggleLearned() {
-      Storage.markMastered(word.id);
-      document.getElementById('mark-btn').textContent = '✅ 已掌握';
+      storageManager.markLearned(word.id);
+      document.getElementById('mark-btn').textContent = '✅ 已学习';
       document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)';
       document.getElementById('mark-btn').style.color = 'white';
     }
@@ -127,12 +115,10 @@
         if (i === correctIdx) o.classList.add('correct');
         else if (i === idx && i !== correctIdx) o.classList.add('incorrect');
       });
-      const quiz = word.quiz;
       if (idx === correctIdx) {
-        feedback.innerHTML = `<div class="quiz-feedback correct">✅ 正确！</div>`;
-        Storage.markMastered(word.id);
+        feedback.innerHTML = '<div class="quiz-feedback correct">✅ 正确！</div>';
       } else {
-        feedback.innerHTML = `<div class="quiz-feedback incorrect">❌ 不对哦。正确答案是：${String.fromCharCode(65 + correctIdx)}. ${quiz.options[correctIdx]}</div>`;
+        feedback.innerHTML = `<div class="quiz-feedback incorrect">❌ 不对。正确答案：${String.fromCharCode(65+correctIdx)}</div>`;
       }
     }
   </script>

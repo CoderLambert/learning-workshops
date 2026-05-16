@@ -21,31 +21,24 @@
   <div class="container">
     <!-- 导航 -->
     <nav class="nav">
-      <div>
-        <a href="../" class="nav-logo" style="margin-right:8px;opacity:0.8;">🏠</a>
-        <a href="./index.html" class="nav-logo">📘 TypeScript 学习工坊</a>
-      </div>
+      <a href="./index.html" class="nav-logo">📘 TypeScript 学习工坊</a>
       <ul class="nav-links">
         <li><a href="./index.html" class="nav-link">首页</a></li>
         <li><a href="./learn.html" class="nav-link" style="color:var(--primary);">学习</a></li>
         <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link">索引</a></li>
         <li><a href="./progress.html" class="nav-link">进度</a></li>
       </ul>
     </nav>
 
-    <!-- 页面标题 -->
     <h1 class="text-3xl font-bold text-center mb-2">📚 TypeScript 知识点</h1>
     <p class="text-center text-gray-600 mb-8">17个核心知识点，系统学习 TypeScript 类型系统和最佳实践</p>
 
-    <!-- 搜索框 -->
     <div class="search-box">
       <input type="text" class="search-input" id="search-input" placeholder="🔍 搜索知识点...">
     </div>
 
-    <!-- 筛选栏 -->
     <div class="flex flex-wrap justify-center gap-2 mb-8" id="filter-bar"></div>
-
-    <!-- 知识点列表 -->
     <div class="roots-grid" id="knowledge-list"></div>
 
     <footer class="footer">
@@ -53,55 +46,44 @@
     </footer>
   </div>
 
-  <script src="./js/siteConfig.js"></script>
   <script src="./js/wordData.js"></script>
   <script src="./js/storage.js"></script>
   <script>
-    const words = wordData.words || [];
-    const progress = storageManager.getProgress();
-    const favorites = storageManager.getFavorites();
+    const words = WordRoots || [];
+
+    // 从 localStorage 读取收藏和已学习
+    const favorites = JSON.parse(localStorage.getItem('ts_favorites') || '[]');
+    const learned = JSON.parse(localStorage.getItem('ts_learned') || '[]');
 
     // 筛选栏
     const filterBar = document.getElementById('filter-bar');
-    const categories = [...new Set(words.map(w => w.category || '全部'))];
+    const origins = [...new Set(words.map(w => w.origin))];
 
     const allBtn = document.createElement('button');
     allBtn.className = 'btn btn-secondary filter-btn bg-primary/10';
-    allBtn.textContent = '全部 (' + words.length + ')';
-    allBtn.onclick = () => filterByCategory(null, allBtn);
+    allBtn.textContent = '全部';
+    allBtn.onclick = () => { setActive(allBtn); renderList(words); };
     filterBar.appendChild(allBtn);
 
-    categories.forEach(cat => {
-      const count = words.filter(w => (w.category || '全部') === cat).length;
+    origins.forEach(o => {
       const btn = document.createElement('button');
       btn.className = 'btn btn-secondary filter-btn';
-      btn.textContent = cat + ' (' + count + ')';
-      btn.onclick = () => filterByCategory(cat, btn);
+      btn.textContent = o;
+      btn.onclick = () => { setActive(btn); renderList(words.filter(w => w.origin === o)); };
       filterBar.appendChild(btn);
     });
 
-    const favBtn = document.createElement('button');
-    favBtn.className = 'btn btn-secondary filter-btn';
-    favBtn.textContent = '⭐ 收藏 (' + favorites.length + ')';
-    favBtn.onclick = () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-primary/10'));
-      favBtn.classList.add('bg-primary/10');
-      renderList(words.filter(w => storageManager.isFavorite(w.id)));
-    };
-    filterBar.appendChild(favBtn);
-
-    function filterByCategory(category, activeBtn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-primary/10'));
-      activeBtn.classList.add('bg-primary/10');
-      renderList(words.filter(w => !category || (w.category || '全部') === category));
+    function setActive(btn) {
+      filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-primary/10'));
+      btn.classList.add('bg-primary/10');
     }
 
     document.getElementById('search-input').addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase();
       renderList(words.filter(w =>
-        (w.title || w.root || '').toLowerCase().includes(q) ||
-        (w.description || '').toLowerCase().includes(q) ||
-        (w.category || '').toLowerCase().includes(q)
+        w.root.toLowerCase().includes(q) ||
+        w.description.toLowerCase().includes(q) ||
+        w.origin.toLowerCase().includes(q)
       ));
     });
 
@@ -113,13 +95,9 @@
         return;
       }
       items.forEach(word => {
-        const title = word.title || word.root || '未命名';
-        const desc = word.description || '';
-        const tags = word.tags || word.origin ? [word.origin].filter(Boolean) : [];
-        const diff = word.difficulty || '';
-        const diffColor = (diff === '入门级' || diff === '入门') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
-        const learned = storageManager.getProgress()[word.id]?.learned;
-        const fav = storageManager.isFavorite(word.id);
+        const isLearned = learned.includes(word.id);
+        const isFav = favorites.includes(word.id);
+        const diffColor = (word.difficulty === '基础') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
 
         const card = document.createElement('div');
         card.className = 'root-card';
@@ -127,13 +105,14 @@
         card.innerHTML = `
           <div class="flex justify-between items-start mb-4">
             <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl">📘</div>
-            <button class="btn btn-sm ${fav ? 'btn-primary' : 'btn-secondary'}" onclick="event.stopPropagation(); toggleFav(${word.id}, this)">${fav ? '★ 已收藏' : '☆ 收藏'}</button>
+            <button class="btn btn-sm ${isFav ? 'btn-primary' : 'btn-secondary'}" onclick="event.stopPropagation(); toggleFav(${word.id}, this)">${isFav ? '★ 已收藏' : '☆ 收藏'}</button>
           </div>
-          <h3 class="text-xl font-bold mb-2">${title}${learned ? ' <span style="font-size:14px;">✅</span>' : ''}</h3>
-          <p class="text-gray-600 mb-4">${desc}</p>
+          <h3 class="text-xl font-bold mb-2">${word.root}${isLearned ? ' <span style="font-size:14px;">✅</span>' : ''}</h3>
+          <p class="text-gray-600 mb-4">${word.description}</p>
           <div class="flex flex-wrap gap-2 mb-4">
-            ${tags.map(t => `<span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">${t}</span>`).join('')}
-            ${diff ? `<span class="text-xs px-2 py-1 rounded-full ${diffColor}">${diff}</span>` : ''}
+            <span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">${word.origin}</span>
+            <span class="text-xs px-2 py-1 rounded-full ${diffColor}">${word.difficulty}</span>
+            <span class="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">⏱ ${word.duration}</span>
           </div>
           <div class="flex justify-between items-center">
             <a href="./root-detail.html?id=${word.id}" class="text-primary font-medium hover:underline">开始学习 →</a>
@@ -145,8 +124,11 @@
     }
 
     function toggleFav(id, btn) {
-      storageManager.toggleFavorite(id);
-      const isFav = storageManager.isFavorite(id);
+      let favs = JSON.parse(localStorage.getItem('ts_favorites') || '[]');
+      const idx = favs.indexOf(id);
+      if (idx > -1) { favs.splice(idx, 1); } else { favs.push(id); }
+      localStorage.setItem('ts_favorites'), JSON.stringify(favs));
+      const isFav = favs.includes(id);
       btn.className = 'btn btn-sm ' + (isFav ? 'btn-primary' : 'btn-secondary');
       btn.textContent = isFav ? '★ 已收藏' : '☆ 收藏';
     }
