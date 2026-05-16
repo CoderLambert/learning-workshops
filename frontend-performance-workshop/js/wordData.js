@@ -164,7 +164,7 @@ const WordRoots = [
     root: "FCP（首次内容绘制）",
     origin: "核心指标",
     meaning: "First Contentful Paint，页面首次渲染出内容的时间",
-    description: "FCP衡量从导航开始到页面渲染出第一个DOM内容（文本、图片、SVG、canvas等）的时间。建议FCP在1.8秒以内为良好，1.8-3.0秒需要改进，超过3.0秒较差。FCP是用户感知到的"页面开始加载"的标志。FCP和LCP的区别在于：FCP是第一个内容，LCP是最大的内容。优化FCP重点关注关键渲染路径。",
+    description: "FCP衡量从导航开始到页面渲染出第一个DOM内容（文本、图片、SVG、canvas等）的时间。建议FCP在1.8秒以内为良好，1.8-3.0秒需要改进，超过3.0秒较差。FCP是用户感知到的`页面开始加载`的标志。FCP和LCP的区别在于：FCP是第一个内容，LCP是最大的内容。优化FCP重点关注关键渲染路径。",
     examples: [
       {
         word: "内联关键CSS",
@@ -324,7 +324,7 @@ const WordRoots = [
     root: "懒加载与延迟执行",
     origin: "加载策略",
     meaning: "按需加载非关键资源，减少首屏负担",
-    description: "懒加载是前端性能优化的核心策略之一，核心理念是"只加载当前需要的内容"。适用于图片、视频、iframe、组件、数据、路由等。浏览器原生支持loading=\"lazy\"，框架层面也有React.lazy()、Vue defineAsyncComponent等。配合IntersectionObserver可实现更精细的懒加载控制。",
+    description: "懒加载是前端性能优化的核心策略之一，核心理念是`只加载当前需要的内容`。适用于图片、视频、iframe、组件、数据、路由等。浏览器原生支持loading=\"lazy\"，框架层面也有React.lazy()、Vue defineAsyncComponent等。配合IntersectionObserver可实现更精细的懒加载控制。",
     examples: [
       {
         word: "iframe懒加载",
