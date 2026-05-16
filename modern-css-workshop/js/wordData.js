@@ -583,3 +583,4 @@ const WordRoots = [
     }
   }
 ];
+window.wordData = { words: WordRoots };

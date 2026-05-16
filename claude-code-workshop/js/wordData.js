@@ -550,4 +550,4 @@ const WordRoots = [
     }
   }
 ]
-window.WordRoots = WordRoots;
+window.WordRoots = WordRoots;window.wordData = { words: WordRoots };

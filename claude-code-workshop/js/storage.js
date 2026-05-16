@@ -53,3 +53,19 @@ const storageManager = {
   }
 };
 window.storageManager = storageManager;
+
+// 兼容旧版 Storage API
+const Storage = {
+  init() {},
+  markLearned(id) { storageManager.markLearned(id); },
+  markMastered(id) { storageManager.markLearned(id); },
+  getProgress() { return storageManager.getProgress(); },
+  getStats() { const s = storageManager.getStats(); return {...s, mastered: s.learned}; },
+  isMastered(id) { return !!storageManager.getProgress()[id]?.learned; },
+  isLearned(id) { return !!storageManager.getProgress()[id]?.learned; },
+  getLastVisited() { return parseInt(localStorage.getItem('ts_workshop_last_visited') || '0'); },
+  saveLastVisited(id) { localStorage.setItem('ts_workshop_last_visited', String(id)); },
+  getMastered() { return Object.keys(storageManager.getProgress()).filter(id => storageManager.getProgress()[id]?.learned); },
+  reset() { localStorage.clear(); }
+};
+window.Storage = Storage;

@@ -62,3 +62,5 @@ const storageManager = {
     return { total, learned, percentage }
   }
 }
+
+window.storageManager = storageManager;
