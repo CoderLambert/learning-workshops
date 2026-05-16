@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识点索引 - 现代CSS学习工坊</title>
+
+  <meta name="description" content="现代CSS所有知识点索引，支持搜索和分类筛选，快速查找你需要的内容">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://modern-css-workshop.vercel.app/roots.html">
+
+  <meta property="og:title" content="知识点索引 - 现代CSS学习工坊">
+  <meta property="og:description" content="现代CSS所有知识点索引，支持搜索和分类筛选">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://modern-css-workshop.vercel.app/roots.html">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#8B5CF6">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CSS学习工坊">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo">🎨 现代CSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link" style="color: var(--primary);">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold mb-2 text-gray-900">知识点索引</h1>
+      <p class="text-gray-600">共 <span id="total-count">18</span> 个知识点，搜索关键词快速查找</p>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="search-input" placeholder="搜索知识点名称、描述关键词..." class="search-input">
+    </div>
+
+    <div class="flex flex-wrap gap-2 justify-center mb-8">
+      <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-category="all">全部</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="CSS3核心特性">CSS3核心特性</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="布局系统">布局系统</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="CSS动画">CSS动画</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="响应式设计">响应式设计</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="CSS变量与函数">CSS变量与函数</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="CSS新特性">CSS新特性</button>
+    </div>
+
+    <div class="roots-grid" id="roots-grid"></div>
+
+    <div id="no-result" class="text-center py-12 text-gray-500 hidden">
+      <svg class="h-16 w-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h1m4 0h1m-7 4h.01M12 3h.01M3 21h18a2 2 0 002-2V5a2 2 0 00-2-2H3a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+      <p>没有找到匹配的知识点，请尝试其他关键词</p>
+    </div>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    let currentCategory = 'all';
+    let searchKeyword = '';
+
+    function init() {
+      document.getElementById('total-count').textContent = WordRoots.length;
+      renderCards();
+    }
+
+    function renderCards() {
+      const filteredItems = WordRoots.filter(item => {
+        if (currentCategory !== 'all' && item.origin !== currentCategory) return false;
+        if (searchKeyword) {
+          const keyword = searchKeyword.toLowerCase();
+          return (
+            item.root.toLowerCase().includes(keyword) ||
+            item.meaning.toLowerCase().includes(keyword) ||
+            item.description.toLowerCase().includes(keyword) ||
+            item.origin.toLowerCase().includes(keyword)
+          );
+        }
+        return true;
+      });
+
+      const grid = document.getElementById('roots-grid');
+      const noResult = document.getElementById('no-result');
+
+      if (filteredItems.length === 0) {
+        grid.innerHTML = '';
+        noResult.classList.remove('hidden');
+        return;
+      }
+
+      noResult.classList.add('hidden');
+      grid.innerHTML = filteredItems.map(item => {
+        const isMastered = Storage.isMastered(item.id);
+        const isNew = item.origin.includes('新特性');
+        
+        return `
+          <a href="./root-detail.html?id=${item.id}" class="root-card group">
+            <div class="flex justify-between items-start mb-2">
+              <span class="text-xs font-medium px-2 py-1 rounded-full ${
+                isNew ? 'bg-yellow-100 text-yellow-800' : 'bg-blue-100 text-blue-800'
+              }">${item.origin}</span>
+              ${isMastered ? '<span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">✅ 已掌握</span>' : ''}
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 group-hover:text-primary transition-colors mb-2">${item.root}</h3>
+            <p class="text-gray-600 text-sm line-clamp-2">${item.meaning}</p>
+          </a>
+        `;
+      }).join('');
+    }
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      searchKeyword = e.target.value.trim();
+      renderCards();
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentCategory = btn.dataset.category;
+        document.querySelectorAll('.filter-btn').forEach(b => {
+          b.classList.remove('bg-primary/10', 'text-primary');
+          b.classList.add('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+        });
+        btn.classList.remove('bg-gray-100', 'text-gray-700', 'hover:bg-gray-200');
+        btn.classList.add('bg-primary/10', 'text-primary');
+        renderCards();
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>

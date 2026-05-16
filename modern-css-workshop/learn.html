@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习 - 现代CSS学习工坊</title>
+
+  <meta name="description" content="系统学习现代CSS核心知识点，渐进式学习，逐步掌握CSS3特性、Flex/Grid布局、CSS动画、响应式设计等">
+  <meta name="keywords" content="CSS,CSS3,学习,教程,布局,动画,响应式">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://modern-css-workshop.vercel.app/learn.html">
+
+  <meta property="og:title" content="学习 - 现代CSS学习工坊">
+  <meta property="og:description" content="系统学习现代CSS核心知识点，渐进式学习，逐步掌握CSS3特性、Flex/Grid布局等">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://modern-css-workshop.vercel.app/learn.html">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#8B5CF6">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CSS学习工坊">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo">🎨 现代CSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link" style="color: var(--primary);">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <!-- 学习卡片 -->
+    <div class="learn-card card" id="learnCard">
+      <div class="learn-card-title" id="cardTitle">加载中...</div>
+      <div class="learn-card-meta" id="cardMeta"></div>
+      <div class="learn-card-description" id="cardDescription"></div>
+      
+      <div class="learn-card-examples" id="cardExamples"></div>
+
+      <div class="quiz" id="quizSection" style="display: none;">
+        <div class="quiz-question" id="quizQuestion"></div>
+        <div class="quiz-options" id="quizOptions"></div>
+        <div id="quizFeedback" class="quiz-feedback" style="display: none;"></div>
+        <button id="nextBtn" class="btn btn-primary" style="display: none;">下一个知识点 →</button>
+      </div>
+
+      <div class="learn-navigation">
+        <button id="prevBtn" class="btn btn-secondary">← 上一个</button>
+        <button id="markMasteredBtn" class="btn btn-primary" style="display: none;">标记为已掌握 ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    let currentIndex = 0;
+    let selectedOption = null;
+    let answered = false;
+
+    function init() {
+      const lastVisited = Storage.getLastVisited();
+      if (lastVisited) {
+        const index = WordRoots.findIndex(item => item.id === lastVisited);
+        if (index !== -1) currentIndex = index;
+      }
+      renderCard();
+    }
+
+    function renderCard() {
+      const item = WordRoots[currentIndex];
+      if (!item) return;
+
+      document.title = `${item.root} - 现代CSS学习工坊`;
+      document.getElementById('cardTitle').textContent = item.root;
+      document.getElementById('cardMeta').textContent = `${item.origin} · 知识点 ${currentIndex + 1}/${WordRoots.length}`;
+      document.getElementById('cardDescription').textContent = item.description;
+
+      const examplesHtml = item.examples.map(example => `
+        <div class="learn-card-example">
+          <div class="example-title">${example.word}：${example.meaning}</div>
+          <div class="example-code">${escapeHtml(example.explanation)}</div>
+        </div>
+      `).join('');
+      document.getElementById('cardExamples').innerHTML = examplesHtml;
+
+      renderQuiz(item.quiz);
+
+      selectedOption = null;
+      answered = false;
+      document.getElementById('quizFeedback').style.display = 'none';
+      document.getElementById('nextBtn').style.display = 'none';
+      
+      if (Storage.isMastered(item.id)) {
+        document.getElementById('markMasteredBtn').textContent = '✓ 已掌握';
+        document.getElementById('markMasteredBtn').disabled = true;
+      } else {
+        document.getElementById('markMasteredBtn').textContent = '标记为已掌握 ✓';
+        document.getElementById('markMasteredBtn').disabled = false;
+      }
+
+      document.getElementById('prevBtn').disabled = currentIndex === 0;
+      Storage.markLearned(item.id);
+      Storage.saveLastVisited(item.id);
+    }
+
+    function renderQuiz(quiz) {
+      if (!quiz) {
+        document.getElementById('quizSection').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('quizSection').style.display = 'block';
+      document.getElementById('quizQuestion').textContent = quiz.question;
+      
+      const optionsHtml = quiz.options.map((option, index) => `
+        <div class="quiz-option" data-index="${index}">${option}</div>
+      `).join('');
+      document.getElementById('quizOptions').innerHTML = optionsHtml;
+
+      document.querySelectorAll('.quiz-option').forEach(option => {
+        option.addEventListener('click', () => {
+          if (answered) return;
+          document.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          selectedOption = parseInt(option.dataset.index, 10);
+          checkAnswer();
+        });
+      });
+    }
+
+    function checkAnswer() {
+      const quiz = WordRoots[currentIndex].quiz;
+      if (selectedOption === null) return;
+
+      answered = true;
+      const feedbackEl = document.getElementById('quizFeedback');
+      
+      if (selectedOption === quiz.correctAnswer) {
+        feedbackEl.textContent = '✅ 回答正确！';
+        feedbackEl.className = 'quiz-feedback correct';
+        document.querySelector(`.quiz-option[data-index="${selectedOption}"]`).classList.add('correct');
+        Storage.markMastered(WordRoots[currentIndex].id);
+        document.getElementById('markMasteredBtn').textContent = '✓ 已掌握';
+        document.getElementById('markMasteredBtn').disabled = true;
+      } else {
+        feedbackEl.textContent = '❌ 回答错误，正确答案是：' + quiz.options[quiz.correctAnswer];
+        feedbackEl.className = 'quiz-feedback incorrect';
+        document.querySelector(`.quiz-option[data-index="${selectedOption}"]`).classList.add('incorrect');
+        document.querySelector(`.quiz-option[data-index="${quiz.correctAnswer}"]`).classList.add('correct');
+      }
+
+      feedbackEl.style.display = 'block';
+      document.getElementById('nextBtn').style.display = 'inline-flex';
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        renderCard();
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      if (currentIndex < WordRoots.length - 1) {
+        currentIndex++;
+        renderCard();
+      } else {
+        alert('🎉 恭喜你已经完成所有知识点的学习！');
+        window.location.href = './progress.html';
+      }
+    });
+
+    document.getElementById('markMasteredBtn').addEventListener('click', () => {
+      const item = WordRoots[currentIndex];
+      Storage.markMastered(item.id);
+      document.getElementById('markMasteredBtn').textContent = '✓ 已掌握';
+      document.getElementById('markMasteredBtn').disabled = true;
+    });
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    init();
+  </script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>现代CSS学习工坊</title>
+
+  <!-- SEO 基础 -->
+  <meta name="description" content="系统学习现代CSS核心特性，涵盖CSS3选择器、Flexbox/Grid布局、CSS动画、响应式设计、Tailwind CSS最佳实践、容器查询、:has选择器、滚动驱动动画等前沿技术。">
+  <meta name="keywords" content="CSS,CSS3,Flexbox,Grid,响应式设计,CSS动画,容器查询,Tailwind CSS,前端开发,现代CSS">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://modern-css-workshop.vercel.app">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="现代CSS学习工坊">
+  <meta property="og:description" content="系统学习现代CSS核心特性，涵盖CSS3选择器、Flexbox/Grid布局、CSS动画、响应式设计等18个核心知识点。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://modern-css-workshop.vercel.app">
+  <meta property="og:site_name" content="现代CSS学习工坊">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#8B5CF6">
+
+  <!-- iOS Safari PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CSS学习工坊">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo">🎨 现代CSS学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">开始学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡复习</a></li>
+        <li><a href="./roots.html" class="nav-link">知识点索引</a></li>
+        <li><a href="./progress.html" class="nav-link">学习进度</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero区 -->
+    <section class="hero">
+      <h1 class="hero-title">
+        18个核心知识点<br>
+        掌握现代CSS<br>
+        布局动画全搞定
+      </h1>
+      <p class="hero-subtitle">
+        从CSS3核心特性到容器查询、:has选择器、滚动驱动动画，系统学习现代CSS新特性和最佳实践
+      </p>
+      <div class="hero-cta">
+        <a href="./learn.html" class="btn btn-primary">开始第一个知识点 →</a>
+        <a href="./flashcard.html" class="btn btn-secondary">闪卡复习</a>
+      </div>
+    </section>
+
+    <!-- 统计卡片 -->
+    <section class="stats">
+      <div class="stat-card">
+        <div class="stat-value">18</div>
+        <div class="stat-label">核心知识点</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">50+</div>
+        <div class="stat-label">代码示例</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">15分钟</div>
+        <div class="stat-label">每日学习</div>
+      </div>
+    </section>
+
+    <!-- 介绍 -->
+    <section class="card">
+      <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 16px; color: var(--gray-900);">什么是现代CSS？</h2>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 16px;">
+        CSS已经从简单的样式语言进化为强大的视觉表达工具。现代CSS拥有完整的布局系统（Flexbox/Grid）、强大的选择器（:has()、容器查询）、原生动画（Transitions/Animations），甚至可以实现滚动驱动的交互效果。
+      </p>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700); margin-bottom: 16px;">
+        同时，Tailwind CSS等原子化框架正在改变我们编写样式的方式，通过实用类直接在HTML中组合样式，大幅提升开发效率。
+      </p>
+      <p style="font-size: 18px; line-height: 1.8; color: var(--gray-700);">
+        本网站系统整理了现代CSS的18个核心知识点，从基础到进阶，帮助你建立完整的CSS知识体系，无论是构建响应式页面、实现复杂动画，还是使用最新CSS特性，都能游刃有余。
+      </p>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-tagline">用纯CSS实现一切可能</div>
+      <p class="footer-description">
+        CSS已经从简单的样式语言进化为强大的视觉表达工具。本网站系统整理了CSS3核心特性、Flexbox/Grid布局、CSS动画、响应式设计、层叠层、:has选择器、滚动驱动动画等18个核心知识点，帮助你全面掌握现代CSS。
+      </p>
+      <p>© 2025 现代CSS学习工坊</p>
+    </footer>
+  </div>
+
+  <!-- 脚本 -->
+  <script src="./js/wordData.js"></script>
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/storage.js"></script>
+</body>
+</html>
