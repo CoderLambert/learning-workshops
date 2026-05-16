@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习进度 - Vue 3 学习工坊</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#42B883">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo"><span class="emoji">🌿</span> Vue 3 学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link">索引</a></li>
+        <li><a href="./progress.html" class="nav-link" style="color: var(--primary);">进度</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-center mb-8">📊 学习进度</h1>
+
+    <div class="progress-stats" id="progress-stats"></div>
+
+    <!-- 进度条 -->
+    <div class="card mb-8">
+      <h3 class="text-xl font-bold mb-4">总体进度</h3>
+      <div style="background: var(--gray-100); border-radius: 9999px; height: 16px; overflow: hidden;">
+        <div id="progress-bar" style="background: linear-gradient(135deg, #42B883, #35495E); height: 100%; border-radius: 9999px; transition: width 0.5s ease; width: 0%;"></div>
+      </div>
+      <p class="text-sm text-gray-500 mt-2" id="progress-text">0 / 0 已完成</p>
+    </div>
+
+    <!-- 分类进度 -->
+    <div id="category-progress"></div>
+
+    <!-- 收藏 -->
+    <div class="progress-list mt-8" id="favorites-list" style="display: none;">
+      <h3 class="progress-list-title">⭐ 我的收藏</h3>
+      <div id="favorites-items"></div>
+    </div>
+
+    <div class="text-center mt-8">
+      <button class="btn btn-secondary" onclick="if(confirm('确定要重置所有进度吗？')){localStorage.clear();location.reload();}">重置进度</button>
+    </div>
+
+    <footer class="footer">
+      <a href="../" class="btn btn-secondary">← 返回学习工坊合集</a>
+    </footer>
+  </div>
+
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/wordData.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    const stats = storageManager.getStats()
+    const progress = storageManager.getProgress()
+    const favorites = storageManager.getFavorites()
+
+    // 统计卡片
+    document.getElementById('progress-stats').innerHTML = `
+      <div class="progress-card"><div class="progress-number">${stats.total}</div><div class="progress-label">总知识点</div></div>
+      <div class="progress-card"><div class="progress-number">${stats.learned}</div><div class="progress-label">已学习</div></div>
+      <div class="progress-card"><div class="progress-number">${stats.total - stats.learned}</div><div class="progress-label">待学习</div></div>
+      <div class="progress-card"><div class="progress-number">${favorites.length}</div><div class="progress-label">已收藏</div></div>
+    `
+
+    // 进度条
+    document.getElementById('progress-bar').style.width = stats.percentage + '%'
+    document.getElementById('progress-text').textContent = `${stats.learned} / ${stats.total} 已完成（${stats.percentage}%）`
+
+    // 分类进度
+    const categories = {}
+    wordData.words.forEach(w => {
+      if (!categories[w.category]) categories[w.category] = { total: 0, learned: 0 }
+      categories[w.category].total++
+      if (progress[w.id]?.learned) categories[w.category].learned++
+    })
+
+    let catHtml = ''
+    Object.entries(categories).forEach(([name, data]) => {
+      const pct = Math.round((data.learned / data.total) * 100)
+      catHtml += `
+        <div class="card mb-4">
+          <div class="flex justify-between mb-2">
+            <span class="font-bold">${name}</span>
+            <span class="text-sm text-gray-500">${data.learned}/${data.total}（${pct}%）</span>
+          </div>
+          <div style="background: var(--gray-100); border-radius: 9999px; height: 10px; overflow: hidden;">
+            <div style="background: var(--primary); height: 100%; width: ${pct}%; border-radius: 9999px;"></div>
+          </div>
+        </div>
+      `
+    })
+    document.getElementById('category-progress').innerHTML = catHtml
+
+    // 收藏
+    if (favorites.length > 0) {
+      const favList = document.getElementById('favorites-list')
+      favList.style.display = 'block'
+      const favWords = wordData.words.filter(w => favorites.includes(w.id))
+      document.getElementById('favorites-items').innerHTML = favWords.map(w =>
+        `<a href="./root-detail.html?id=${w.id}" class="inline-flex items-center gap-2 text-primary hover:underline" style="margin: 4px 8px 4px 0;">${w.title}</a>`
+      ).join('')
+    }
+  </script>
+</body>
+</html>

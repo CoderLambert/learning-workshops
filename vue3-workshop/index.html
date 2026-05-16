@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue 3 学习工坊</title>
+
+  <!-- SEO -->
+  <meta name="description" content="系统学习 Vue 3 核心特性，涵盖组合式 API、响应式系统、组件通信、Vue Router、Pinia 状态管理等 18 个核心知识点。">
+  <meta name="keywords" content="Vue 3,Vue.js,Composition API,组合式 API,响应式系统,Pinia,Vue Router,前端开发">
+  <meta name="author" content="小秘书">
+  <meta name="language" content="zh-CN">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://vue3-workshop.vercel.app">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Vue 3 学习工坊">
+  <meta property="og:description" content="系统学习 Vue 3 核心特性，覆盖组合式 API、响应式系统、组件通信、状态管理等 18 个核心知识点。">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vue3-workshop.vercel.app">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#42B883">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vue3工坊">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- 样式 -->
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 导航 -->
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo"><span class="emoji">🌿</span> Vue 3 学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link">索引</a></li>
+        <li><a href="./progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1 class="hero-title">Vue 3 学习工坊</h1>
+      <p class="hero-subtitle">系统学习 Vue 3 核心特性与最佳实践，覆盖组合式 API、响应式系统、组件通信、状态管理等完整知识体系</p>
+      <div class="hero-cta">
+        <a href="./learn.html" class="btn btn-primary">开始学习</a>
+        <a href="./flashcard.html" class="btn btn-secondary">闪卡复习</a>
+      </div>
+    </section>
+
+    <!-- 统计 -->
+    <section class="stats" id="stats">
+      <div class="stat-card">
+        <div class="stat-value" id="total-topics">18</div>
+        <div class="stat-label">核心知识点</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="total-examples">54</div>
+        <div class="stat-label">代码示例</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="total-quizzes">18</div>
+        <div class="stat-label">测验题目</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="learned-count">0</div>
+        <div class="stat-label">已学习</div>
+      </div>
+    </section>
+
+    <!-- 知识分类 -->
+    <section>
+      <h2 class="text-3xl font-bold text-center mb-8">📚 知识体系</h2>
+      <div class="roots-grid" id="category-grid"></div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+      <div class="footer-tagline">🌿 Vue 3 学习工坊</div>
+      <p class="footer-description">系统学习 Vue 3 核心特性，从组合式 API 到状态管理，助你成为 Vue 高手</p>
+      <a href="../" class="btn btn-secondary" style="margin-top: 16px;">← 返回学习工坊合集</a>
+    </footer>
+  </div>
+
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/wordData.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    // 更新统计
+    const stats = storageManager.getStats()
+    document.getElementById('learned-count').textContent = stats.learned
+
+    // 渲染分类
+    const categories = {}
+    wordData.words.forEach(w => {
+      if (!categories[w.category]) categories[w.category] = []
+      categories[w.category].push(w)
+    })
+
+    const categoryEmojis = {
+      "响应式系统": "🔄",
+      "组合式 API": "⚡",
+      "组件通信": "🔗",
+      "模板语法": "📝",
+      "高级特性": "🎯",
+      "路由与导航": "🧭",
+      "状态管理": "📦",
+      "TypeScript": "📘"
+    }
+
+    const categoryColors = {
+      "响应式系统": ["#E8F8F0", "#42B883"],
+      "组合式 API": ["#EEF2FF", "#6366F1"],
+      "组件通信": ["#FEF3C7", "#F59E0B"],
+      "模板语法": ["#DBEAFE", "#3B82F6"],
+      "高级特性": ["#FCE7F3", "#EC4899"],
+      "路由与导航": ["#D1FAE5", "#10B981"],
+      "状态管理": ["#E0E7FF", "#6366F1"],
+      "TypeScript": ["#DBEAFE", "#2563EB"]
+    }
+
+    const grid = document.getElementById('category-grid')
+    Object.entries(categories).forEach(([name, words]) => {
+      const colors = categoryColors[name] || ["#F3F4F6", "#6B7280"]
+      const emoji = categoryEmojis[name] || "📖"
+      const card = document.createElement('div')
+      card.className = 'root-card'
+      card.href = './roots.html?category=' + encodeURIComponent(name)
+      card.innerHTML = `
+        <h3 class="text-xl font-bold mb-2">${emoji} ${name}</h3>
+        <p class="text-gray-600 mb-4">${words.length} 个知识点</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          ${words.map(w => `<span class="text-xs px-2 py-1 rounded-full" style="background: ${colors[0]}; color: ${colors[1]};">${w.title.slice(0, 12)}${w.title.length > 12 ? '...' : ''}</span>`).join('')}
+        </div>
+      `
+      grid.appendChild(card)
+    })
+  </script>
+</body>
+</html>

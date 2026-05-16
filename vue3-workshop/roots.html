@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识点索引 - Vue 3 学习工坊</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#42B883">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo"><span class="emoji">🌿</span> Vue 3 学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link" style="color: var(--primary);">索引</a></li>
+        <li><a href="./progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </nav>
+
+    <h1 class="text-3xl font-bold text-center mb-8">📚 知识点索引</h1>
+    <div class="search-box">
+      <input type="text" class="search-input" id="search-input" placeholder="搜索知识点...">
+    </div>
+
+    <div class="roots-grid" id="roots-grid"></div>
+
+    <footer class="footer">
+      <a href="../" class="btn btn-secondary">← 返回学习工坊合集</a>
+    </footer>
+  </div>
+
+  <script src="./js/wordData.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    function renderRoots(words) {
+      const grid = document.getElementById('roots-grid')
+      grid.innerHTML = ''
+      const progress = storageManager.getProgress()
+      const categoryColors = {
+        "响应式系统": "#42B883", "组合式 API": "#6366F1", "组件通信": "#F59E0B",
+        "模板语法": "#3B82F6", "高级特性": "#EC4899", "路由与导航": "#10B981",
+        "状态管理": "#8B5CF6", "TypeScript": "#2563EB"
+      }
+
+      words.forEach(word => {
+        const learned = progress[word.id]?.learned
+        const color = categoryColors[word.category] || "#6B7280"
+        const card = document.createElement('a')
+        card.href = `./root-detail.html?id=${word.id}`
+        card.className = 'root-card'
+        card.style.borderLeftColor = color
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-2">
+            <h3 class="text-lg font-bold">${word.title}</h3>
+            ${learned ? '<span class="text-green-700">✅</span>' : ''}
+          </div>
+          <p class="text-sm text-gray-500 mb-2">${word.category} · ${word.difficulty} · ${word.estimatedMinutes}分钟</p>
+          <p class="text-gray-600 text-sm">${word.description.slice(0, 80)}${word.description.length > 80 ? '...' : ''}</p>
+        `
+        grid.appendChild(card)
+      })
+    }
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase()
+      renderRoots(wordData.words.filter(w =>
+        w.title.toLowerCase().includes(q) || w.category.toLowerCase().includes(q) || w.description.toLowerCase().includes(q)
+      ))
+    })
+
+    renderRoots(wordData.words)
+  </script>
+</body>
+</html>

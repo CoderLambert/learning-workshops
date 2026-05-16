@@ -1,0 +1,21 @@
+{
+  "name": "Vue 3 学习工坊",
+  "short_name": "Vue3工坊",
+  "description": "系统学习 Vue 3 核心特性与最佳实践",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAFAFA",
+  "theme_color": "#42B883",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>闪卡复习 - Vue 3 学习工坊</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#42B883">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo"><span class="emoji">🌿</span> Vue 3 学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link" style="color: var(--primary);">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link">索引</a></li>
+        <li><a href="./progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </nav>
+
+    <section class="hero">
+      <h1 class="hero-title" style="font-size: 36px;">闪卡复习</h1>
+      <p class="hero-subtitle">点击卡片翻转查看答案，← → 键切换，空格翻转</p>
+      <div class="flex justify-center gap-2 mb-4">
+        <span class="text-sm text-gray-500" id="card-counter"></span>
+      </div>
+    </section>
+
+    <div class="flashcard" id="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="flashcard-inner" id="flashcard-inner">
+        <div class="flashcard-front">
+          <p class="text-sm text-gray-500 mb-4" id="card-category"></p>
+          <h2 class="text-3xl font-bold" id="card-front-text"></h2>
+        </div>
+        <div class="flashcard-back">
+          <p class="text-sm text-gray-500 mb-4">答案</p>
+          <p id="card-back-text" style="font-size: 16px; line-height: 1.7; color: var(--gray-700);"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-center gap-4 mt-8">
+      <button class="btn btn-secondary" onclick="prevCard()">← 上一张</button>
+      <button class="btn btn-primary" onclick="markLearnedAndNext()">✓ 已掌握</button>
+      <button class="btn btn-secondary" onclick="nextCard()">下一张 →</button>
+    </div>
+
+    <footer class="footer">
+      <a href="../" class="btn btn-secondary">← 返回学习工坊合集</a>
+    </footer>
+  </div>
+
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/wordData.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    let currentIndex = 0
+    const words = wordData.words
+
+    function renderCard() {
+      const word = words[currentIndex]
+      document.getElementById('card-counter').textContent = `第 ${currentIndex + 1} / ${words.length} 张`
+      document.getElementById('card-category').textContent = word.category
+      document.getElementById('card-front-text').textContent = word.title
+      document.getElementById('card-back-text').textContent = word.description
+      document.getElementById('flashcard').classList.remove('flipped')
+    }
+
+    function nextCard() { currentIndex = (currentIndex + 1) % words.length; renderCard() }
+    function prevCard() { currentIndex = (currentIndex - 1 + words.length) % words.length; renderCard() }
+
+    function markLearnedAndNext() {
+      storageManager.markLearned(words[currentIndex].id)
+      nextCard()
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextCard()
+      if (e.key === 'ArrowLeft') prevCard()
+      if (e.key === ' ') { e.preventDefault(); document.getElementById('flashcard').classList.toggle('flipped') }
+    })
+
+    renderCard()
+  </script>
+</body>
+</html>

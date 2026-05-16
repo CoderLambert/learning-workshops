@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>详情 - Vue 3 学习工坊</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>">
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#42B883">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/minimal.css">
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <a href="./index.html" class="nav-logo"><span class="emoji">🌿</span> Vue 3 学习工坊</a>
+      <ul class="nav-links">
+        <li><a href="./learn.html" class="nav-link">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./roots.html" class="nav-link">索引</a></li>
+        <li><a href="./progress.html" class="nav-link">进度</a></li>
+      </ul>
+    </nav>
+
+    <div class="learn-card" id="learn-card">
+      <div id="card-header"></div>
+      <div id="card-examples"></div>
+      <div id="card-quiz"></div>
+      <div class="learn-navigation">
+        <a href="./learn.html" class="btn btn-secondary">← 返回列表</a>
+        <div class="flex gap-2">
+          <button class="btn btn-secondary" id="mark-btn" onclick="toggleLearned()">✓ 标记已学</button>
+          <a href="#" class="btn btn-primary" id="next-link">下一个 →</a>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <a href="../" class="btn btn-secondary">← 返回学习工坊合集</a>
+    </footer>
+  </div>
+
+  <script src="./js/siteConfig.js"></script>
+  <script src="./js/wordData.js"></script>
+  <script src="./js/storage.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search)
+    const wordId = parseInt(params.get('id'))
+    const word = wordData.words.find(w => w.id === wordId)
+
+    if (!word) {
+      document.getElementById('learn-card').innerHTML = '<p class="text-center text-gray-500 mt-8">知识点未找到</p><div class="text-center"><a href="./learn.html" class="btn btn-primary">返回列表</a></div>'
+      throw new Error('Word not found')
+    }
+
+    const progress = storageManager.getProgress()
+    const isLearned = progress[word.id]?.learned
+
+    // 标题区
+    const diffColor = word.difficulty === '入门' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+    document.getElementById('card-header').innerHTML = `
+      <h1 class="learn-card-title">${word.title}</h1>
+      <div class="learn-card-meta">
+        <span class="text-sm px-2 py-1 rounded-full ${diffColor}">${word.difficulty}</span>
+        <span class="text-sm px-2 py-1 rounded-full bg-blue-100 text-blue-800" style="margin-left: 8px;">${word.category}</span>
+        <span class="text-sm" style="margin-left: 12px;">约 ${word.estimatedMinutes} 分钟</span>
+        ${isLearned ? '<span class="text-sm" style="margin-left: 12px;">✅ 已学习</span>' : ''}
+      </div>
+      <p class="learn-card-description">${word.description}</p>
+    `
+
+    // 代码示例
+    const examplesHtml = word.examples.map((ex, i) => `
+      <div class="learn-card-example">
+        <p class="example-title">示例 ${i + 1}：${ex.title}</p>
+        <pre class="example-code">${ex.code.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+      </div>
+    `).join('')
+    document.getElementById('card-examples').innerHTML = `<div class="learn-card-examples"><h2 class="text-xl font-bold mb-4">💻 代码示例</h2>${examplesHtml}</div>`
+
+    // 测验
+    const quiz = word.quiz
+    document.getElementById('card-quiz').innerHTML = `
+      <div class="quiz" id="quiz-container">
+        <p class="quiz-question">🧠 ${quiz.question}</p>
+        <div class="quiz-options" id="quiz-options">
+          ${quiz.options.map((opt, i) => `
+            <div class="quiz-option" onclick="checkAnswer(${i})">${String.fromCharCode(65 + i)}. ${opt}</div>
+          `).join('')}
+        </div>
+        <div id="quiz-feedback"></div>
+      </div>
+    `
+
+    // 标记按钮
+    document.getElementById('mark-btn').textContent = isLearned ? '✅ 已学习' : '✓ 标记已学'
+    if (isLearned) document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)'
+    document.getElementById('mark-btn').style.color = 'white'
+
+    // 下一个链接
+    const nextIdx = (wordData.words.findIndex(w => w.id === word.id) + 1) % wordData.words.length
+    document.getElementById('next-link').href = `./root-detail.html?id=${wordData.words[nextIdx].id}`
+
+    function toggleLearned() {
+      storageManager.markLearned(word.id)
+      document.getElementById('mark-btn').textContent = '✅ 已学习'
+      document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)'
+    }
+
+    function checkAnswer(idx) {
+      const opts = document.querySelectorAll('.quiz-option')
+      const feedback = document.getElementById('quiz-feedback')
+      opts.forEach((o, i) => {
+        o.style.pointerEvents = 'none'
+        if (i === quiz.correct) o.classList.add('correct')
+        else if (i === idx && i !== quiz.correct) o.classList.add('incorrect')
+      })
+      if (idx === quiz.correct) {
+        feedback.innerHTML = `<div class="quiz-feedback correct">✅ 正确！${quiz.explanation}</div>`
+      } else {
+        feedback.innerHTML = `<div class="quiz-feedback incorrect">❌ 不对哦。${quiz.explanation}</div>`
+      }
+    }
+  </script>
+</body>
+</html>
