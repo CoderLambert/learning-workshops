@@ -4,267 +4,154 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>学习 - TypeScript 学习工坊</title>
-
-  <!-- SEO 基础 -->
-  <meta name="description" content="系统学习TypeScript 5.5+核心知识点，渐进式学习，逐步掌握类型系统、高级用法和最佳实践">
-  <meta name="keywords" content="TypeScript,学习,教程,类型系统,前端开发">
-  <meta name="author" content="小秘书">
-  <meta name="language" content="zh-CN">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://CoderLambert.github.io/learning-workshops/typescript-workshop/learn.html">
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="学习 - TypeScript 学习工坊">
-  <meta property="og:description" content="系统学习TypeScript 5.5+核心知识点，渐进式学习，逐步掌握类型系统、高级用法和最佳实践">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://CoderLambert.github.io/learning-workshops/typescript-workshop/learn.html">
-  <meta property="og:image" content="https://CoderLambert.github.io/learning-workshops/typescript-workshop/icon-512.png">
-
-  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📘</text></svg>">
-
-  <!-- PWA -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#3178C6">
-
-  <!-- iOS Safari PWA 支持 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="TypeScript学习">
   <link rel="apple-touch-icon" href="./icon-192.png">
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <!-- 引入Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- 配置Tailwind自定义主题 -->
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#3178C6',
-          },
-          fontFamily: {
-            inter: ['Inter', 'system-ui', 'sans-serif'],
-          },
-        },
-      }
-    }
-  </script>
-
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .content-auto {
-        content-visibility: auto;
-      }
-      .text-balance {
-        text-wrap: balance;
-      }
-      .card-hover {
-        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      }
-      .card-hover:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="./css/minimal.css">
 </head>
-<body class="font-inter bg-gray-50 text-gray-800 min-h-screen">
-  <div class="container mx-auto px-4 pb-16">
+<body>
+  <div class="container">
     <!-- 导航 -->
-    <nav class="flex justify-between items-center py-6 mb-10 border-b border-gray-200">
+    <nav class="nav">
       <div>
-        <a href="https://CoderLambert.github.io/learning-workshops/" class="nav-logo" style="margin-right: 8px; opacity: 0.8; transition: opacity 0.2s;" title="返回学习工坊首页">🏠</a><a href="#" class="nav-logo">📘 TypeScript 学习工坊</a>
+        <a href="../" class="nav-logo" style="margin-right:8px;opacity:0.8;">🏠</a>
+        <a href="./index.html" class="nav-logo">📘 TypeScript 学习工坊</a>
       </div>
-      <ul class="flex gap-8">
-        <li><a href="./index.html" class="text-gray-600 hover:text-primary transition-colors">首页</a></li>
-        <li><a href="./learn.html" class="text-primary font-medium">学习</a></li>
-        <li><a href="./flashcard.html" class="text-gray-600 hover:text-primary transition-colors">闪卡</a></li>
-        <li><a href="./progress.html" class="text-gray-600 hover:text-primary transition-colors">进度</a></li>
+      <ul class="nav-links">
+        <li><a href="./index.html" class="nav-link">首页</a></li>
+        <li><a href="./learn.html" class="nav-link" style="color:var(--primary);">学习</a></li>
+        <li><a href="./flashcard.html" class="nav-link">闪卡</a></li>
+        <li><a href="./progress.html" class="nav-link">进度</a></li>
       </ul>
     </nav>
 
     <!-- 页面标题 -->
-    <div class="text-center mb-10">
-      <h1 class="text-3xl font-bold mb-3">📚 TypeScript 知识点大全</h1>
-      <p class="text-gray-600 max-w-2xl mx-auto">30+核心知识点，从零开始系统学习TypeScript 5.5+，掌握类型系统和最佳实践</p>
-    </div>
+    <h1 class="text-3xl font-bold text-center mb-2">📚 TypeScript 知识点</h1>
+    <p class="text-center text-gray-600 mb-8">17个核心知识点，系统学习 TypeScript 类型系统和最佳实践</p>
 
     <!-- 搜索框 -->
-    <div class="max-w-md mx-auto mb-8">
-      <div class="relative">
-        <input type="text" id="search-input" placeholder="🔍 搜索知识点，比如：泛型、类型守卫" class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
-        <i class="fa fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-      </div>
+    <div class="search-box">
+      <input type="text" class="search-input" id="search-input" placeholder="🔍 搜索知识点...">
     </div>
 
     <!-- 筛选栏 -->
-    <div class="flex flex-wrap gap-2 justify-center mb-8">
-      <button class="filter-btn btn btn-sm bg-primary/10 text-primary px-3 py-1 rounded-full" data-filter="all">全部</button>
-      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="fav">⭐ 我的收藏</button>
-      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="learned">✅ 已学习</button>
-      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="easy">⭐ 基础</button>
-      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="medium">⭐⭐ 进阶</button>
-      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-filter="hard">⭐⭐⭐ 高级</button>
-    </div>
+    <div class="flex flex-wrap justify-center gap-2 mb-8" id="filter-bar"></div>
 
-    <!-- 知识点卡片列表 -->
-    <div id="knowledge-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
-      <!-- 知识点卡片会动态生成 -->
-    </div>
+    <!-- 知识点列表 -->
+    <div class="roots-grid" id="knowledge-list"></div>
+
+    <footer class="footer">
+      <a href="../" class="btn btn-secondary">← 返回学习工坊合集</a>
+    </footer>
   </div>
 
+  <script src="./js/siteConfig.js"></script>
   <script src="./js/wordData.js"></script>
   <script src="./js/storage.js"></script>
   <script>
-    // 转换数据格式，兼容原有逻辑
-    window.knowledgeList = window.WordRoots.map(item => ({
-      id: item.id,
-      title: item.root,
-      icon: '📘',
-      description: item.description,
-      tags: [item.origin],
-      difficulty: item.difficulty,
-      duration: item.duration
-    }));
+    const words = wordData.words || [];
+    const progress = storageManager.getProgress();
+    const favorites = storageManager.getFavorites();
 
-    // 搜索功能
-    const searchInput = document.getElementById('search-input');
-    searchInput.addEventListener('input', (e) => {
-      const keyword = e.target.value.trim().toLowerCase();
-      filterKnowledge('search', keyword);
+    // 筛选栏
+    const filterBar = document.getElementById('filter-bar');
+    const categories = [...new Set(words.map(w => w.category || '全部'))];
+
+    const allBtn = document.createElement('button');
+    allBtn.className = 'btn btn-secondary filter-btn bg-primary/10';
+    allBtn.textContent = '全部 (' + words.length + ')';
+    allBtn.onclick = () => filterByCategory(null, allBtn);
+    filterBar.appendChild(allBtn);
+
+    categories.forEach(cat => {
+      const count = words.filter(w => (w.category || '全部') === cat).length;
+      const btn = document.createElement('button');
+      btn.className = 'btn btn-secondary filter-btn';
+      btn.textContent = cat + ' (' + count + ')';
+      btn.onclick = () => filterByCategory(cat, btn);
+      filterBar.appendChild(btn);
     });
 
-    // 筛选功能
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        // 点击筛选的时候清空搜索框
-        searchInput.value = '';
-        const filter = btn.getAttribute('data-filter');
-        filterKnowledge('filter', filter);
-        
-        // 更新按钮选中状态
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('bg-primary/10', 'text-primary');
-          b.classList.add('bg-gray-100', 'text-gray-700');
-        });
-        btn.classList.remove('bg-gray-100', 'text-gray-700');
-        btn.classList.add('bg-primary/10', 'text-primary');
-      });
-    });
+    const favBtn = document.createElement('button');
+    favBtn.className = 'btn btn-secondary filter-btn';
+    favBtn.textContent = '⭐ 收藏 (' + favorites.length + ')';
+    favBtn.onclick = () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-primary/10'));
+      favBtn.classList.add('bg-primary/10');
+      renderList(words.filter(w => storageManager.isFavorite(w.id)));
+    };
+    filterBar.appendChild(favBtn);
 
-    // 收藏功能
-    function toggleFavorite(id) {
-      let favorites = JSON.parse(localStorage.getItem('ts_collection') || '[]');
-      const btn = document.getElementById(`fav-btn-${id}`);
-      if (favorites.includes(id)) {
-        favorites = favorites.filter(item => item !== id);
-        btn.innerHTML = '<i class="fa fa-star-o"></i> 收藏';
-        btn.classList.remove('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
-      } else {
-        favorites.push(id);
-        btn.innerHTML = '<i class="fa fa-star text-yellow-500"></i> 已收藏';
-        btn.classList.add('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
-      }
-      localStorage.setItem('ts_collection', JSON.stringify(favorites));
+    function filterByCategory(category, activeBtn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('bg-primary/10'));
+      activeBtn.classList.add('bg-primary/10');
+      renderList(words.filter(w => !category || (w.category || '全部') === category));
     }
 
-    // 页面加载时渲染知识点
-    document.addEventListener('DOMContentLoaded', () => {
-      renderKnowledgeList();
-      // 初始化收藏状态
-      const favorites = JSON.parse(localStorage.getItem('ts_collection') || '[]');
-      // 初始化已学习状态
-      const learned = JSON.parse(localStorage.getItem('ts_learned') || '[]');
-      favorites.forEach(id => {
-        const btn = document.getElementById(`fav-btn-${id}`);
-        if (btn) {
-          btn.innerHTML = '<i class="fa fa-star text-yellow-500"></i> 已收藏';
-          btn.classList.add('bg-yellow-50', 'text-yellow-700', 'border-yellow-300');
-        }
-      });
-      learned.forEach(id => {
-        const card = document.querySelector(`[data-id="${id}"]`);
-        if (card) {
-          // 增加已学习标记
-          const learnedTag = document.createElement('span');
-          learnedTag.className = 'ml-2 px-2 py-0.5 bg-green-50 text-green-700 text-xs font-semibold rounded-full';
-          learnedTag.innerText = '✅ 已学习';
-          card.querySelector('h3').appendChild(learnedTag);
-          // 卡片变浅，显示已学习
-          card.classList.add('opacity-75');
-        }
-      });
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderList(words.filter(w =>
+        (w.title || w.root || '').toLowerCase().includes(q) ||
+        (w.description || '').toLowerCase().includes(q) ||
+        (w.category || '').toLowerCase().includes(q)
+      ));
     });
 
-    // 渲染知识点列表
-    function renderKnowledgeList(filteredList = null) {
-      const list = filteredList || window.knowledgeList;
+    function renderList(items) {
       const container = document.getElementById('knowledge-list');
-      container.innerHTML = list.map(item => `
-        <div class="knowledge-card bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-xl p-6 card-hover" data-id="${item.id}" data-tags="${item.tags.join(' ')}" data-title="${item.title.toLowerCase()}">
-          <div class="flex items-start justify-between mb-4">
-            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl">${item.icon}</div>
-            <button id="fav-btn-${item.id}" onclick="toggleFavorite('${item.id}')" class="px-3 py-1 border border-gray-200 rounded-lg text-sm font-medium hover:border-gray-300 transition-colors flex items-center gap-1">
-              <i class="fa fa-star-o"></i> 收藏
-            </button>
+      container.innerHTML = '';
+      if (items.length === 0) {
+        container.innerHTML = '<p class="text-center text-gray-500" style="grid-column:1/-1;">没有找到匹配的知识点</p>';
+        return;
+      }
+      items.forEach(word => {
+        const title = word.title || word.root || '未命名';
+        const desc = word.description || '';
+        const tags = word.tags || word.origin ? [word.origin].filter(Boolean) : [];
+        const diff = word.difficulty || '';
+        const diffColor = (diff === '入门级' || diff === '入门') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+        const learned = storageManager.getProgress()[word.id]?.learned;
+        const fav = storageManager.isFavorite(word.id);
+
+        const card = document.createElement('div');
+        card.className = 'root-card';
+        card.style.cursor = 'pointer';
+        card.innerHTML = `
+          <div class="flex justify-between items-start mb-4">
+            <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl">📘</div>
+            <button class="btn btn-sm ${fav ? 'btn-primary' : 'btn-secondary'}" onclick="event.stopPropagation(); toggleFav(${word.id}, this)">${fav ? '★ 已收藏' : '☆ 收藏'}</button>
           </div>
-          <h3 class="text-xl font-bold mb-2 flex items-center">${item.title}</h3>
-          <p class="text-gray-600 mb-4 leading-relaxed">${item.description}</p>
+          <h3 class="text-xl font-bold mb-2">${title}${learned ? ' <span style="font-size:14px;">✅</span>' : ''}</h3>
+          <p class="text-gray-600 mb-4">${desc}</p>
           <div class="flex flex-wrap gap-2 mb-4">
-            ${item.tags.map(tag => `<span class="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full">${tag}</span>`).join('')}
-            <span class="px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-semibold rounded-full flex items-center gap-1">
-              <i class="fa fa-clock-o"></i> ${item.duration || '8分钟'}
-            </span>
+            ${tags.map(t => `<span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">${t}</span>`).join('')}
+            ${diff ? `<span class="text-xs px-2 py-1 rounded-full ${diffColor}">${diff}</span>` : ''}
           </div>
           <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-500">难度：${item.difficulty || '基础'}</span>
-            <a href="./learn.html?id=${item.id}" class="inline-flex items-center gap-2 text-blue-600 font-semibold hover:gap-3 transition-all">
-              开始学习
-              <i class="fa fa-arrow-right"></i>
-            </a>
+            <a href="./root-detail.html?id=${word.id}" class="text-primary font-medium hover:underline">开始学习 →</a>
           </div>
-        </div>
-      `).join('');
+        `;
+        card.onclick = () => { window.location.href = `./root-detail.html?id=${word.id}` };
+        container.appendChild(card);
+      });
     }
 
-    // 筛选知识点
-    function filterKnowledge(type, value) {
-      let filtered = [...window.knowledgeList];
-      
-      if (type === 'search') {
-        filtered = filtered.filter(item => 
-          item.title.toLowerCase().includes(value) || 
-          item.description.toLowerCase().includes(value) ||
-          item.tags.some(tag => tag.toLowerCase().includes(value))
-        );
-      } else if (type === 'filter') {
-        if (value === 'fav') {
-          const favorites = JSON.parse(localStorage.getItem('ts_collection') || '[]');
-          filtered = filtered.filter(item => favorites.includes(item.id));
-        } else if (value === 'learned') {
-          const learned = JSON.parse(localStorage.getItem('ts_learned') || '[]');
-          filtered = filtered.filter(item => learned.includes(item.id));
-        } else if (value === 'easy') {
-          filtered = filtered.filter(item => item.difficulty === '基础');
-        } else if (value === 'medium') {
-          filtered = filtered.filter(item => item.difficulty === '进阶');
-        } else if (value === 'hard') {
-          filtered = filtered.filter(item => item.difficulty === '高级');
-        }
-      }
-
-      renderKnowledgeList(filtered);
+    function toggleFav(id, btn) {
+      storageManager.toggleFavorite(id);
+      const isFav = storageManager.isFavorite(id);
+      btn.className = 'btn btn-sm ' + (isFav ? 'btn-primary' : 'btn-secondary');
+      btn.textContent = isFav ? '★ 已收藏' : '☆ 收藏';
     }
+
+    renderList(words);
   </script>
 </body>
 </html>
