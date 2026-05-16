@@ -1,88 +1,55 @@
-// ===== Storage Manager - Progress Persistence =====
-const StorageManager = (function() {
-  const STORAGE_KEY = 'nextjs_workshop_progress';
+// 学习进度本地存储管理
+const storageManager = {
+  PREFIX: "workshop_",
 
-  function _getDefaultProgress() {
-    return {
-      masteredRoots: [],
-      currentRootIndex: 0,
-      lastStudyDate: null
-    };
-  }
-
-  function _validateProgress(data) {
-    return (
-      data &&
-      typeof data === 'object' &&
-      Array.isArray(data.masteredRoots) &&
-      typeof data.currentRootIndex === 'number'
-    );
-  }
-
-  function getProgress() {
+  getProgress() {
     try {
-      const data = localStorage.getItem(STORAGE_KEY);
-      if (!data) return _getDefaultProgress();
-      const parsed = JSON.parse(data);
-      if (!_validateProgress(parsed)) {
-        console.warn('Invalid progress data, using default');
-        return _getDefaultProgress();
-      }
-      return parsed;
-    } catch (error) {
-      console.error('Failed to load progress:', error);
-      return _getDefaultProgress();
-    }
-  }
+      const data = localStorage.getItem(this.PREFIX + "progress");
+      return data ? JSON.parse(data) : {};
+    } catch { return {}; }
+  },
 
-  function _saveProgress(progress) {
+  saveProgress(progress) {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-      return true;
-    } catch (error) {
-      console.error('Failed to save progress:', error);
-      return false;
-    }
-  }
+      localStorage.setItem(this.PREFIX + "progress", JSON.stringify(progress));
+    } catch (e) { console.warn("存储失败:", e); }
+  },
 
-  return {
-    getProgress,
-    markRootAsMastered(rootId) {
-      const progress = getProgress();
-      if (!progress.masteredRoots.includes(rootId)) {
-        progress.masteredRoots.push(rootId);
-        progress.lastStudyDate = new Date().toISOString();
-        _saveProgress(progress);
-      }
-      return progress;
-    },
-    unmarkRoot(rootId) {
-      const progress = getProgress();
-      progress.masteredRoots = progress.masteredRoots.filter(id => id !== rootId);
-      _saveProgress(progress);
-      return progress;
-    },
-    updateProgress(rootIndex) {
-      const progress = getProgress();
-      progress.currentRootIndex = rootIndex;
-      progress.lastStudyDate = new Date().toISOString();
-      _saveProgress(progress);
-      return progress;
-    },
-    isMastered(rootId) {
-      return getProgress().masteredRoots.includes(rootId);
-    },
-    getMasteredCount() {
-      return getProgress().masteredRoots.length;
-    },
-    resetProgress() {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-        return true;
-      } catch (error) {
-        console.error('Failed to reset progress:', error);
-        return false;
-      }
-    }
-  };
-})();
+  markLearned(id) {
+    const progress = this.getProgress();
+    progress[id] = { learned: true, timestamp: Date.now() };
+    this.saveProgress(progress);
+  },
+
+  getFavorites() {
+    try {
+      const data = localStorage.getItem(this.PREFIX + "favorites");
+      return data ? JSON.parse(data) : [];
+    } catch { return []; }
+  },
+
+  toggleFavorite(id) {
+    const favs = this.getFavorites();
+    const idx = favs.indexOf(id);
+    if (idx > -1) favs.splice(idx, 1);
+    else favs.push(id);
+    try {
+      localStorage.setItem(this.PREFIX + "favorites", JSON.stringify(favs));
+    } catch (e) { console.warn("收藏存储失败:", e); }
+    return favs;
+  },
+
+  isFavorite(id) {
+    return this.getFavorites().includes(id);
+  },
+
+  getStats() {
+    const progress = this.getProgress();
+    const total = (typeof wordData !== 'undefined' && wordData.words) ? wordData.words.length :
+                  (typeof WordRoots !== 'undefined') ? WordRoots.length : 0;
+    const learned = Object.keys(progress).length;
+    const percentage = total > 0 ? Math.round((learned / total) * 100) : 0;
+    return { total, learned, percentage };
+  }
+};
+window.storageManager = storageManager;
