@@ -45,7 +45,7 @@
     </div>
 
     <div class="text-center mt-8">
-      <button class="btn btn-secondary" onclick="if(confirm('确定重置所有进度？')){localStorage.removeItem('ts_workshop_progress');localStorage.removeItem('ts_collection');localStorage.removeItem('ts_learned');localStorage.removeItem('ts_mastered');location.reload();}">重置进度</button>
+      <button class="btn btn-secondary" onclick="if(confirm('确定重置所有进度？')){Object.keys(localStorage).filter(k=>k.startsWith('ts_')).forEach(k=>localStorage.removeItem(k));location.reload();}">重置进度</button>
     </div>
 
     <footer class="footer">

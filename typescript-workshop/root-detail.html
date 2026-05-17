@@ -53,7 +53,7 @@
       document.getElementById('learn-card').innerHTML = '<p class="text-center text-gray-500 mt-8">知识点未找到</p><div class="text-center"><a href="./learn.html" class="btn btn-primary">返回列表</a></div>';
     } else {
       const isLearned = storageManager.getProgress()[word.id]?.learned;
-      const diffColor = word.difficulty === '基础' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+      const diffColor = ({'基础': 'bg-green-100 text-green-800', '进阶': 'bg-yellow-100 text-yellow-800', '高级': 'bg-red-100 text-red-800'})[word.difficulty] || 'bg-gray-100 text-gray-800';
 
       document.getElementById('card-header').innerHTML = `
         <h1 class="learn-card-title">${word.root}</h1>
@@ -90,21 +90,30 @@
         `;
       }
 
-      document.getElementById('mark-btn').textContent = isLearned ? '✅ 已学习' : '✓ 标记已学';
-      if (isLearned) { document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)'; }
-      document.getElementById('mark-btn').style.color = 'white';
+      updateMarkBtn(isLearned);
 
       const nextIdx = (WordRoots.findIndex(w => w.id === word.id) + 1) % WordRoots.length;
       document.getElementById('next-link').href = `./root-detail.html?id=${WordRoots[nextIdx].id}`;
+    }
 
-      storageManager.markLearned(word.id);
+    function updateMarkBtn(learned) {
+      const btn = document.getElementById('mark-btn');
+      btn.textContent = learned ? '✅ 已学习' : '✓ 标记已学';
+      btn.style.backgroundColor = learned ? 'var(--primary)' : '';
+      btn.style.color = learned ? 'white' : '';
     }
 
     function toggleLearned() {
-      storageManager.markLearned(word.id);
-      document.getElementById('mark-btn').textContent = '✅ 已学习';
-      document.getElementById('mark-btn').style.backgroundColor = 'var(--primary)';
-      document.getElementById('mark-btn').style.color = 'white';
+      const progress = storageManager.getProgress();
+      const isCurrentlyLearned = !!progress[word.id]?.learned;
+      if (isCurrentlyLearned) {
+        delete progress[word.id];
+        storageManager.saveProgress(progress);
+        updateMarkBtn(false);
+      } else {
+        storageManager.markLearned(word.id);
+        updateMarkBtn(true);
+      }
     }
 
     function checkAnswer(idx, correctIdx) {

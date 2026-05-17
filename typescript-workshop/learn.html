@@ -51,9 +51,9 @@
   <script>
     const words = WordRoots || [];
 
-    // 从 localStorage 读取收藏和已学习
-    const favorites = JSON.parse(localStorage.getItem('ts_favorites') || '[]');
-    const learned = JSON.parse(localStorage.getItem('ts_learned') || '[]');
+    // 读取收藏和已学习状态
+    const getFavorites = () => storageManager.getFavorites();
+    const isLearned = (id) => !!storageManager.getProgress()[id]?.learned;
 
     // 筛选栏
     const filterBar = document.getElementById('filter-bar');
@@ -95,9 +95,9 @@
         return;
       }
       items.forEach(word => {
-        const isLearned = learned.includes(word.id);
-        const isFav = favorites.includes(word.id);
-        const diffColor = (word.difficulty === '基础') ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+        const learned = isLearned(word.id);
+        const isFav = getFavorites().includes(word.id);
+        const diffColor = ({'基础': 'bg-green-100 text-green-800', '进阶': 'bg-yellow-100 text-yellow-800', '高级': 'bg-red-100 text-red-800'})[word.difficulty] || 'bg-gray-100 text-gray-800';
 
         const card = document.createElement('div');
         card.className = 'root-card';
@@ -107,7 +107,7 @@
             <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-2xl">📘</div>
             <button class="btn btn-sm ${isFav ? 'btn-primary' : 'btn-secondary'}" onclick="event.stopPropagation(); toggleFav(${word.id}, this)">${isFav ? '★ 已收藏' : '☆ 收藏'}</button>
           </div>
-          <h3 class="text-xl font-bold mb-2">${word.root}${isLearned ? ' <span style="font-size:14px;">✅</span>' : ''}</h3>
+          <h3 class="text-xl font-bold mb-2">${word.root}${learned ? ' <span style="font-size:14px;">✅</span>' : ''}</h3>
           <p class="text-gray-600 mb-4">${word.description}</p>
           <div class="flex flex-wrap gap-2 mb-4">
             <span class="text-xs px-2 py-1 rounded-full bg-blue-50 text-blue-700">${word.origin}</span>
@@ -124,10 +124,7 @@
     }
 
     function toggleFav(id, btn) {
-      let favs = JSON.parse(localStorage.getItem('ts_favorites') || '[]');
-      const idx = favs.indexOf(id);
-      if (idx > -1) { favs.splice(idx, 1); } else { favs.push(id); }
-      localStorage.setItem('ts_favorites'), JSON.stringify(favs));
+      const favs = storageManager.toggleFavorite(id);
       const isFav = favs.includes(id);
       btn.className = 'btn btn-sm ' + (isFav ? 'btn-primary' : 'btn-secondary');
       btn.textContent = isFav ? '★ 已收藏' : '☆ 收藏';

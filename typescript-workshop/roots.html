@@ -48,7 +48,7 @@
 
     <div class="text-center mb-8">
       <h1 class="text-3xl font-bold mb-2 text-gray-900">知识点索引</h1>
-      <p class="text-gray-600">共 <span id="total-count">30</span> 个知识点，搜索关键词快速查找</p>
+      <p class="text-gray-600">共 <span id="total-count">0</span> 个知识点，搜索关键词快速查找</p>
     </div>
 
     <!-- 搜索框 -->
@@ -68,7 +68,9 @@
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="核心特性">核心特性</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="高级特性">高级特性</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="新特性">新特性</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="高级用法">高级用法</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="实战应用">实战应用</button>
+      <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="高级实战">高级实战</button>
       <button class="filter-btn btn btn-sm bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 rounded-full" data-category="最佳实践">最佳实践</button>
     </div>
 
@@ -133,7 +135,7 @@
         const isLearned = Storage.isLearned(item.id)
         
         return `
-          <a href="./root-detail?id=${item.id}" class="root-card group">
+          <a href="./root-detail.html?id=${item.id}" class="root-card group">
             <div class="flex justify-between items-start mb-2">
               <span class="text-xs font-medium px-2 py-1 rounded-full ${
                 item.origin.includes('v4新特性') 

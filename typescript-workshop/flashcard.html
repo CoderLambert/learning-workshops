@@ -60,7 +60,6 @@
   <script>
     let currentIndex = 0;
     const words = WordRoots || [];
-    const favorites = JSON.parse(localStorage.getItem('ts_collection') || '[]');
     const mastered = JSON.parse(localStorage.getItem('ts_mastered') || '[]');
 
     function renderCard() {
@@ -76,9 +75,10 @@
     function prevCard() { currentIndex = (currentIndex - 1 + words.length) % words.length; renderCard(); }
 
     function markLearnedAndNext() {
-      mastered.push(words[currentIndex].id);
+      const id = words[currentIndex].id;
+      if (!mastered.includes(id)) mastered.push(id);
       localStorage.setItem('ts_mastered', JSON.stringify(mastered));
-      storageManager.markLearned(words[currentIndex].id);
+      storageManager.markLearned(id);
       nextCard();
     }
 
